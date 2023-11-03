@@ -1,0 +1,70 @@
+>Story: [The text of a story.]
+>Language: English
+>Prompt: [A prompt describing the characters and the events that occur.]
+>Tone: [A list of tags describing the mood of the story.]
+>Writing style: [A list of tags describing the writing style of the story.]
+>Pacing: [Very slow, slow, medium, fast]
+>Point of View: [The perspective the story is written in]
+>Male Characters: [A list of male character names, or 'unnamed' if no name is given.]
+>Female Characters: [A list of female character names, or 'unnamed' if no name is given.]
+
+>Story: The car skidded to a stop, throwing Harry against the door. He braced himself against the dashboard as the tires spun, trying to find purchase on the icy road. The snow was coming down heavily now, obscuring his vision. He could barely see the other car, a dark blur in the distance.
+The other car was gaining on him. Harry could see the headlights getting closer. He knew he had to do something, or he would be run off the road. He reached for the gearshift, but his hands were shaking too much. He couldn't get a grip.
+The other car was right behind him now. Harry could see the driver's face, twisted with rage. He knew he was going to kill him.
+Harry closed his eyes and braced himself for impact. But then, at the last second, the other car swerved around him and disappeared into the night.
+Harry opened his eyes and took a deep breath. He had escaped, but he knew he wasn't safe yet. The other driver would be back.
+>Language: English
+>Prompt: Write a scene where
+- The main character is a man named Harry who is driving.
+- Harry's car skids on an icy road during a snowstorm.
+- His car skids to a stop, causing him to brace against the dashboard.
+- He sees another car approaching quickly, its headlights illuminating the darkness.
+- Harry struggles to shift gears, but his hands are shaking.
+- The other car swerves around him at the last moment, disappearing into the night.
+- Harry realizes the other driver intended to harm him and knows he must escape.
+>Tone: suspenseful, intense, thrilling
+>Writing style: visceral, action-oriented, cinematic
+>Pacing: Fast
+>Point of View: Third person (Harry)
+>Male Characters: Harry
+>Female Characters: N/A
+
+>Story: The rain fell in sheets, obscuring everything in sight. The wind howled like a banshee, rattling the windows and shaking the trees. Inside, a young woman sat by the fire, reading a book. She shivered as the cold seeped through the windowpanes. The fire crackled and popped, sending sparks up the chimney. The woman could smell the woodsmoke, and it reminded her of camping trips with her family when she was a child. She closed her eyes and took a deep breath, savoring the memory.
+Suddenly, there was a loud crash of thunder, and the lights went out. The woman jumped in surprise and the book fell from her hands. She sat in the darkness, listening to the storm rage outside. With her eyes closed, it felt like she could sense every raindrop as it fell.
+After a few minutes, she got up and went to the window causing the floorboards beneath her to creak; the sound was much more reasssuring than the rain, she thought. She pushed the window open and looked out; she could see nothing but darkness. The rain was still coming down, but the wind felt much more mild than she'd expected.
+The woman sighed and turned away from the window. She went back toward the light of the fireplace and sat down. She concentrated on the warmth of the fire and tried to convince herself she was safe here. She grabbed a heavy volume off the table and opened it to where she'd left off, but she couldn't concentrate.
+>Language: English
+>Prompt: Write a scene where
+- The main character is a lonely woman who sitting by the fire reading a book during a stormy night
+- the storm intensifies, causing the power to go out
+- she opens the window to feel the rain and wind
+- she tries to continue reading but can't concentrate due to the storm
+>Tone: atmospheric, uneasy, startled
+>Writing style: descriptive, sensory, inner thoughts
+>Pacing: Slow
+>Point of View: Third person (woman)
+>Male Characters: N/A
+>Female Characters: unnamed woman
+
+>Story: She stepped out into the narrow, muddy street, feeling her boots sink into the puddles as she made her way toward the main road. In the distance, she spotted two ragged men heading her way, their torn clothes filthy and reeking. One held a heavy wooden club that thudded menacingly with each step, while the other brandished a rusted knife, already stained with flecks of dried blood.
+Liz felt her chest tighten, her hand drifting toward her own concealed blade as the men approached. Their sunken eyes raked over her greedily, seeing a victim rather than a fellow human being. She stood firm, glaring back at them.
+"P-Please, miss..." The taller one stammered, clutching his club with filthy, trembling hands. "It's been a hard month, and we haven't eaten in days...P-Please, give us all you have, and we'll leave you alone."
+Liz studied him closely. Behind the desperate pleading in his voice, she sensed the cruel excitement of a predator cornering his prey. His lanky companion flashed a grin, revealing a mouth of rotten, jagged teeth. He flipped his knife casually in his bony fingers.
+Liz felt her anger rising, but she kept her face neutral. She loosened her cloak and placed a hand on her hip, allowing them to glimpse the sword at her belt.
+"You want to rob me?" she asked calmly, eyes flicking between the two. She shifted her weight to the balls of her feet, ready to draw her blade.
+The tall one licked his lips nervously. "I-I said please!" His eyes kept darting down to her sword. The other man took a small step back, his grinning fading.
+Liz waited, muscles coiled. A long moment passed as the men hesitated, intimidated by the prospect of armed resistance. Finally, the tall one jerked his head and muttered a curse. They both turned and slunk back into the shadows without another word.
+>Language: English
+>Prompt: Write a scene where
+- The main character is a brave young woman named Liz who is travelling alone.
+- Liz encounters two men trying to rob her on a muddy street
+- She intimidates them into backing down without a fight
+>Tone: tense, ominous, defiant
+>Writing style: descriptive, immersive, emotional perspective
+>Pacing: medium
+>Point of View: Third person (Liz)
+>Male Characters: N/A
+>Female Characters: Liz
+
+>Story: {story}
+>Language: English

@@ -1,0 +1,7 @@
+### System:
+A chat between a user and a writing assistant. The assistant can't make comments on the story.{system}
+
+### User:
+{style}{prompt}
+
+### Assistant:

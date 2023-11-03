@@ -1,0 +1,46 @@
+[oobabooga_api]
+use_streaming = true
+blocking_url = 'http://192.168.1.20:5000/api/v1/generate'
+streaming_url = 'ws://192.168.1.20:5005/api/v1/stream'
+# preset_name should be a oobabooga preset; None will use the defaults hardcoded into library/ai_requests.py
+preset_name = 'None'
+context_length = 8192
+
+[prompt_gen]
+#prompt_file_path = "processors/few_shot_templates/full_prompt.txt"
+prompt_file_path = "user/few_shot_templates/full_prompt.txt"
+continuation_likelyhood = 0.5
+
+[prompt_format]
+# the order that the prompt json's keys are pretty printed; unexpected keys will be at the end.
+json_key_order = ["prompt", "tone", "writing style", "genre", "humor", "humorous elements", "pacing", "point of view",
+  "moment-to-moment detail", "sensory detail", "male characters", "female characters", "similar writers",
+  "humor quality", "style of humor", "context", "story"]
+# the fields that are preserved when the prompt jsons are converted into the dataset jsons.
+allowed_fields = [
+  "prompt",
+  "tone",
+  "writing style",
+  "genre",
+#  "humor",
+#  "humorous elements",
+  "pacing",
+  "point of view",
+  "moment-to-moment detail",
+  "sensory detail",
+#  "male characters",
+#  "female characters",
+  "similar writers",
+  "humor quality",
+  "style of humor",
+  "context",
+  "story",
+  "author",
+  "system suffix"
+]
+# the % of prompts to go to the validation set instead of the main dataset. 0.0 to 1.0.
+validation_set_size = 0.0
+
+[hacks]
+# enables tweaks for my particular dataset
+enable = true

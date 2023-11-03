@@ -1,7 +1,6 @@
 *.pyc
 *.xml
-/sources/
 /testing/
 /user/
-/sources/
 response.txt
+user.toml
