@@ -105,13 +105,6 @@ contraction_mapping = {
     "you've": "you’ve",
 }
 
-# # Example usage:
-# input_text = "I can't believe he's won't let us don't do it."
-# for contraction, unicode_apostrophe in contraction_mapping.items():
-#     input_text = input_text.replace(contraction, unicode_apostrophe)
-#
-# print(input_text)
-
 # this is less precise, but should (?) capture "name's"
 lazy_contraction_mapping = {
     "'t": "’t",

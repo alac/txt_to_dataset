@@ -1,7 +1,8 @@
-import json
 import random
+
 from library.token_count import get_token_count
 from library.settings_manager import settings
+from library.hacks_dataset_specific import prompt_dict_to_style_string
 
 
 def undo_hyphens(prompt):
@@ -39,7 +40,7 @@ def get_full_text_from_prompt_dict(prompt_dict):
 def prepare_prompt_dict_for_row(prompt_dict):
     allowed_fields = settings.get_setting("prompt_format.allowed_fields")
     aliased_fields = {
-        "sensory detail" : {
+        "sensory detail": {
             "low": "abstract",
             "medium": "selective",
             "high": "vivid sensory",
@@ -51,94 +52,36 @@ def prepare_prompt_dict_for_row(prompt_dict):
         if field in allowed_fields:
             new_dict[field] = prompt_dict[field]
             if field in aliased_fields:
-                new_dict[field] = aliased_fields[field].get(prompt_dict[field], prompt_dict[field])
+                if prompt_dict[field] not in [None, ""]:
+                    new_dict[field] = aliased_fields[field].get(prompt_dict[field].lower(), prompt_dict[field].lower())
     return new_dict
 
 
-def generate_dataset_row_from_prompt_dict(prompt_dict, use_key_value=False, drop_tags_prob=0.0):
+def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, droppable_tags=[]):
     context = prompt_dict.get("context", None)
     story = prompt_dict.get("story", "")
     prompt = prompt_dict.get("prompt", "")
     prompt = undo_hyphens(prompt)
-
-    if context:
-        context = context.replace("*** ", "***\n")
-    story = story.replace("*** ", "***\n")
 
     none_value_keys = [k for k in prompt_dict if prompt_dict[k] is None]
     for key in none_value_keys:
         del prompt_dict[key]
 
     if drop_tags_prob != 0:
-        # only drop tags that very likely to be present
-        # style_tags = ['tone', 'writing style', 'pacing', 'sensory detail', 'point of view', 'author']
-        style_tags = ['tone', 'writing style', 'genre', 'humor quality', 'pacing', 'sensory detail', 'author']
-        for tag in style_tags:
+        for tag in droppable_tags:
             if random.random() < drop_tags_prob and tag in prompt_dict:
                 del prompt_dict[tag]
 
     style = ""
-    if not use_key_value and prompt_dict.get('point of view', False):
-        tags_line = ""
-        if prompt_dict.get('tone', None) not in [None, ""]:
-            tags_line += f" Tone: {prompt_dict['tone'].lower()}."
-        if prompt_dict.get('writing style', None) not in [None, ""]:
-            tags_line += f" Writing Style: {prompt_dict['writing style'].lower()}."
-        if prompt_dict.get('genre', None) not in [None, ""]:
-            tags_line += f" Genre: {prompt_dict['genre'].lower()}."
-        tags_line = tags_line.replace("..", ".")
-
-        description = ""
-        if prompt_dict.get('humor quality', '').lower() == "high":
-            description += "Humorously written "
-        else:
-            description += "Written "
-        if prompt_dict.get('pacing', None) not in [None, ""]:
-            description += f"with {prompt_dict['pacing'].lower()} pacing, "
-
-        moment_to_moment_detail = prompt_dict.get("moment-to-moment detail", None)
-        if moment_to_moment_detail is not None and moment_to_moment_detail.lower() == "high":
-            description += f"moment to moment detail, "
-
-        sensory_detail = prompt_dict.get("sensory detail", None)
-        if sensory_detail is not None and sensory_detail.lower() != "":
-            description += f"{sensory_detail.lower()} detail, "
-
-        description += f"from a {prompt_dict['point of view']} perspective."
-
-        author = prompt_dict.get("author", None)
-        if author and author != "N/A":
-            description += f" In the style of {author}."
-
-        if tags_line != "":
-            style += "\n" + tags_line
-        style += "\n" + description
-    elif use_key_value:
-        def format_prose(k, v):
-            if k == "moment-to-moment detail":
-                if v.lower() == "high":
-                    return "\nIn moment-to-moment detail."
-                else:
-                    return ""
-            elif k == "sensory detail":
-                return f"\nIn {v.lower()} detail."
-            return f"\nThe {k} is {v.lower()}."
-
+    if settings.get_setting("hacks.use_prose_prompt"):
+        style = prompt_dict_to_style_string(prompt_dict)
+    else:
         items = [i for i in prompt_dict.items()]
         random.shuffle(items)
         for key, value in items:
             if not value:
                 continue
-            if use_key_value:
-                if key == "sensory detail":
-                    style += f"\ndescriptiveness: {value.lower()}"
-                    continue
-                if key == "moment-to-moment detail":
-                    if prompt_dict[key].lower() != "yes":
-                        continue
-                style += f"\n{key}: {value.lower()}"
-            else:
-                style += format_prose(key, value)
+            style += f"{key}: {value.lower()}. "
 
     length = ""
     if len(style) > 0:
@@ -174,7 +117,3 @@ def parse_names(names_list: str) -> list[str]:
 def estimate_total_tokens(all_strs:list[str]):
     format_tokens = 50  # the isolated "### System..."
     return get_token_count("".join([s for s in all_strs if s is not None])) + format_tokens
-
-
-if __name__ == "__main__":
-    pass

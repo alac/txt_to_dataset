@@ -2,143 +2,6 @@ import random
 
 
 authors_dist = {
-    "ursula k. le guin": 586,
-    "george r.r. martin": 432,
-    "patrick rothfuss": 381,
-    "charles dickens": 331,
-    "octavia butler": 280,
-    "gene wolfe": 236,
-    "thomas pynchon": 228,
-    "neil gaiman": 225,
-    "china mi\u00e9ville": 225,
-    "miguel de cervantes": 217,
-    "david foster wallace": 156,
-    "f. scott fitzgerald": 147,
-    "china mieville": 138,
-    "kurt vonnegut": 135,
-    "herman melville": 130,
-    "joseph heller": 128,
-    "vladimir nabokov": 128,
-    "terry pratchett": 118,
-    "neal stephenson": 108,
-    "chuck palahniuk": 103,
-    "alastair reynolds": 94,
-    "jack london": 90,
-    "jonathan swift": 83,
-    "oscar wilde": 83,
-    "bret easton ellis": 81,
-    "cormac mccarthy": 78,
-    "robert harris": 76,
-    "ernest hemingway": 73,
-    "william gibson": 71,
-    "marquis de sade": 66,
-    "douglas adams": 57,
-    "haruki murakami": 56,
-    "orson scott card": 53,
-    "arthur c. clarke": 52,
-    "jane austen": 49,
-    "georges bataille": 46,
-    "gabriel garcia marquez": 46,
-    "robert e. howard": 44,
-    "philip k. dick": 43,
-    "homer": 43,
-    "james joyce": 43,
-    "lewis carroll": 42,
-    "william faulkner": 42,
-    "edgar allan poe": 41,
-    "robert a. heinlein": 40,
-    "j.k. rowling": 38,
-    "louisa may alcott": 38,
-    "ana\u00efs nin": 37,
-    "bernard cornwell": 37,
-    "robert jordan": 36,
-    "hilary mantel": 36,
-    "lois mcmaster bujold": 34,
-    "el james": 31,
-    "robin hobb": 31,
-    "henry miller": 30,
-    "david sedaris": 28,
-    "anais nin": 28,
-    "james oliver curwood": 28,
-    "iain m. banks": 28,
-    "fyodor dostoevsky": 27,
-    "flannery o'connor": 26,
-    "gillian flynn": 25,
-    "joe abercrombie": 25,
-    "h.p. lovecraft": 25,
-    "joseph conrad": 25,
-    "charles bukowski": 24,
-    "margaret atwood": 23,
-    "sylvia day": 22,
-    "don delillo": 22,
-    "alex": 21,
-    "j.r.r. tolkien": 21,
-    "gary paulsen": 21,
-    "virginia woolf": 21,
-    "nathaniel hawthorne": 21,
-    "robert louis stevenson": 20,
-    "laurence sterne": 18,
-    "banana yoshimoto": 18,
-    "hunter s. thompson": 17,
-    "er pope": 17,
-    "ann leckie": 17,
-    "j.d. salinger": 16,
-    "franz kafka": 16,
-    "voltaire": 15,
-    "george orwell": 15,
-    "erica jong": 14,
-    "patrick o'brian": 14,
-    "robert graves": 14,
-    "william s. burroughs": 13,
-    "albert camus": 13,
-    "frank herbert": 13,
-    "ben kane": 13,
-    "ray bradbury": 12,
-    "charlotte bronte": 12,
-    "anne rice": 12,
-    "isaac asimov": 12,
-    "willa cather": 12,
-    "rudyard kipling": 12,
-    "victor hugo": 12,
-    "jeff v": 12,
-    "ermeer": 12,
-    "zane grey": 11,
-    "laura ingalls wilder": 11,
-    "paula hawkins": 11,
-    "h.g. wells": 10,
-    "louis l'amour": 10,
-    "elmore leonard": 9,
-    "augusten burroughs": 9,
-    "toni morrison": 9,
-    "p.g. wodehouse": 8,
-    "stephen king": 7,
-    "n/a": 7,
-    "evelyn waugh": 7,
-    "tracy chevalier": 7,
-    "henry fielding": 6,
-    "milan kundera": 6,
-    "samuel beckett": 6,
-    "dennis lehane": 5,
-    "none provided": 5,
-    "robert asprin": 5,
-    "neal asher": 5,
-    "nora roberts": 5,
-    "edith wharton": 5,
-    "l. frank baum": 5,
-    "larry mcmurtry": 5,
-    "re dumas": 4,
-    "daniel defoe": 4,
-    "saul bellow": 4,
-    "philip roth": 4,
-    "sarah vowell": 4,
-    "isabel allende": 4,
-    "james clavell": 4,
-    "nicholas sparks": 4,
-    "patricia highsmith": 4,
-    "donna tartt": 4,
-    "denis johnson": 4,
-    "thomas hardy": 4,
-    "j.g. ballard": 4
 }
 
 
@@ -155,6 +18,9 @@ def narrow_authors_in_prompt_dict(prompt_dict: dict, min_samples: int = 20) -> d
     :param min_samples: number of examples for the author to be used.
     :return:
     """
+    if len(authors_dist) == 0:
+        return prompt_dict
+
     if prompt_dict.get("author", None) not in [None, ""]:
         return prompt_dict
 
@@ -273,6 +139,51 @@ def alias_similar_keys(prompt_dict: dict) -> dict:
             parts = [remapping.get(p, p) for p in parts]
             prompt_dict[key] = ", ".join(set(parts))
     return prompt_dict
+
+
+def prompt_dict_to_style_string(prompt_dict: dict) -> dict:
+    tags_line = ""
+    if prompt_dict.get('tone', None) not in [None, ""]:
+        tags_line += f" Tone: {prompt_dict['tone'].lower()}."
+    if prompt_dict.get('writing style', None) not in [None, ""]:
+        tags_line += f" Writing Style: {prompt_dict['writing style'].lower()}."
+    if prompt_dict.get('genre', None) not in [None, ""]:
+        tags_line += f" Genre: {prompt_dict['genre'].lower()}."
+    tags_line = tags_line.replace("..", ".")
+
+    description = ""
+    if prompt_dict.get('humor quality', '').lower() == "high":
+        description += "Humorously written "
+    else:
+        description += "Written "
+
+    if prompt_dict.get('pacing', None) not in [None, ""]:
+        description += f"with {prompt_dict['pacing'].lower()} pacing, "
+
+    moment_to_moment_detail = prompt_dict.get("moment-to-moment detail", None)
+    if moment_to_moment_detail is not None and moment_to_moment_detail.lower() == "high":
+        description += f"in moment to moment detail, "
+
+    sensory_detail = prompt_dict.get("sensory detail", None)
+    if sensory_detail not in ["", None]:
+        description += f"in {sensory_detail.lower()} detail, "
+
+    point_of_view = prompt_dict.get("point of view", None)
+    if point_of_view not in ["", None]:
+        description += f"from a {point_of_view} perspective."
+
+    if description.endswith(", "):
+        description = description[:-2] + "."
+
+    author = prompt_dict.get("author", None)
+    if author and author != "N/A":
+        description += f" In the style of {author}."
+
+    style = ""
+    if tags_line != "":
+        style += "\n" + tags_line
+    style += "\n" + description
+    return style
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from library.prompt_parser import generate_dataset_row_from_prompt_dict, prepare
     estimate_total_tokens
 from library.settings_manager import settings
 
-from library.hacks_normalize_tags import narrow_authors_in_prompt_dict, alias_similar_keys
+from library.hacks_dataset_specific import narrow_authors_in_prompt_dict, alias_similar_keys
 
 PROMPT_CACHE = {}
 
@@ -80,7 +80,9 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                     prompt_dict = alias_similar_keys(prompt_dict)
                 try:
                     prompt_dict, style, context, inst, length, story, system = generate_dataset_row_from_prompt_dict(
-                        prompt_dict, use_key_value=False, drop_tags_prob=.5)
+                        prompt_dict,
+                        droppable_tags=settings.get_setting("prompt_format.droppable_tags"),
+                        drop_tags_prob=settings.get_setting("prompt_format.tag_drop_rate"))
                     tokens_used = estimate_total_tokens([style, context, inst, story, system])
                 except Exception as e:
                     print("Exception on file:", prompt_fp)
@@ -90,12 +92,9 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                 new_prompt = {'system': system,
                               'context': context,
                               'instruction': (style + "\n" + inst).strip(),
-                              # 'length': length,
                               'output': story}
                 if context is None:
                     del new_prompt['context']
-                # if length == "":
-                #     del new_prompt['length']
                 PROMPT_CACHE[prompt_fp] = (new_prompt, tokens_used, prompt_dict, length)
 
             if max_tokens is not None:
