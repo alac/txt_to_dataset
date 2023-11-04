@@ -31,13 +31,13 @@ def run(filepath: str, out_folder: str, trials: int, response_length: int):
 def get_prompt_and_outfile(template, replacements_json, out_folder, trials):
     for index, replacements in enumerate(iterate_over_all_possible_dictionaries(replacements_json)):
         prompt = template.format_map(replacements)
-        indices = ""
+        chosen_indices = ""
         for key in replacements_json:
-            indices += str(replacements_json[key].index(replacements[key])) + "_"
+            chosen_indices += key + str(replacements_json[key].index(replacements[key])) + "_"
 
         for trial in range(trials):
-            out_file = os.path.join(out_folder, f"{indices}_{trial}.txt")
-            yield (prompt, out_file)
+            out_file = os.path.join(out_folder, f"{chosen_indices}_trial{trial}.txt")
+            yield prompt, out_file
 
 
 def iterate_over_all_possible_dictionaries(dictionary):
