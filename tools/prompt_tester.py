@@ -5,7 +5,7 @@ import tqdm
 from library.ai_requests import run_ai_request
 
 
-def run(filepath: str, out_folder: str, trials: int):
+def run(filepath: str, out_folder: str, trials: int, response_length: int):
     assert os.path.exists(filepath)
     replacements_path = filepath.replace(".txt", ".replacements.json")
     assert os.path.exists(replacements_path)
@@ -21,7 +21,7 @@ def run(filepath: str, out_folder: str, trials: int):
         if os.path.exists(out_file):
             continue
         result = run_ai_request(prompt, "", ["### System:", "### User:", "### Assistant:"], temperature=.8,
-                                ban_eos_token=True, max_response=400, print_progress=False)
+                                ban_eos_token=True, max_response=response_length, print_progress=False)
         with open(out_file, 'w') as f:
             f.write(prompt)
             f.write("\n")
@@ -54,4 +54,4 @@ def iterate_over_all_possible_dictionaries(dictionary):
 
 
 if __name__ == "__main__":
-    run(r"tools/prompt_test_templates/story_template.txt", r"user/quality_tests/ww20FLR_TP_NOGA_T2", 1)
+    run(r"tools/prompt_test_templates/story_template.txt", r"user/quality_tests/ww21", 1, 600)
