@@ -18,7 +18,7 @@ continuation_likelyhood = 0.5
 # json_key_order: Pretty print order of the json files; unexpected keys will be at the end.
 json_key_order = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "male characters", "female characters", "context", "story"]
-# allowed_fields: The fields that are preserved when the prompt jsons are converted into the dataset jsons.
+# allowed_fields: The fields that used to generate the 'style' field of the dataset row.
 allowed_fields = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "context", "story", "system suffix"]
 # tag_drop_rate: The rate that a tag is left out of prompt in the final dataset.
