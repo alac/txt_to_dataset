@@ -25,3 +25,9 @@ python finalize_dataset.py --input_folder IN_FOLDER
 ```
 TODO:
 ## Advanced Usage
+
+## Credits
+This repo contains lists of male and female names sourced from:
+* https://github.com/datasets-io/male-first-names-en
+* https://github.com/datasets-io/male-first-names-en
+
