@@ -9,6 +9,9 @@ import json
 from library.prompt_parser import sort_keys
 
 
+STORY_SETTINGS_FILE = "STORY_SETTINGS.json"
+
+
 class ValueEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, dict):
@@ -25,11 +28,11 @@ def populate_story_settings(all_in_folders):
         for sub_folder in os.listdir(in_folder):
             if os.path.isdir(os.path.join(in_folder, sub_folder)):
                 all_folders.append(sub_folder)
-        STORY_SETTINGS_FP = os.path.join(in_folder, "STORY_SETTINGS.json")
-        if not os.path.exists(STORY_SETTINGS_FP):
-            with open(STORY_SETTINGS_FP, "w", encoding='utf-8') as f:
+        story_settings_fp = os.path.join(in_folder, STORY_SETTINGS_FILE)
+        if not os.path.exists(story_settings_fp):
+            with open(story_settings_fp, "w", encoding='utf-8') as f:
                 f.write("{}")
-        with open(STORY_SETTINGS_FP, "r+", encoding='utf-8') as f:
+        with open(story_settings_fp, "r+", encoding='utf-8') as f:
             story_settings = json.load(f)
             to_add = [folder for folder in all_folders if folder not in story_settings]
             if to_add:
@@ -40,15 +43,14 @@ def populate_story_settings(all_in_folders):
                     story_settings[folder]["system suffix"] = story_settings[folder].get("system suffix", "")
                 f.seek(0)
                 json.dump(story_settings, f, indent=2, cls=ValueEncoder)
-                updated_story_settings.append(STORY_SETTINGS_FP)
+                updated_story_settings.append(story_settings_fp)
 
     if updated_story_settings:
-        print(f"Updated story settings files ", updated_story_settings)
-        raise ValueError("Update story_settings")
+        raise ValueError(f"Update the story settings file with intended values: ", updated_story_settings)
 
 
 def process_folder(in_folder, out_folder):
-    STORY_SETTINGS_FP = os.path.join(in_folder, "STORY_SETTINGS.json")
+    STORY_SETTINGS_FP = os.path.join(in_folder, STORY_SETTINGS_FILE)
     with open(STORY_SETTINGS_FP, "r+", encoding='utf-8') as f:
         story_settings = json.load(f)
 

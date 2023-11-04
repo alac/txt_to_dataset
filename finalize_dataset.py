@@ -75,8 +75,9 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                     prompt_json = file.read()
                 prompt_dict = json.loads(prompt_json)
                 prompt_dict = prepare_prompt_dict_for_row(prompt_dict)
-                if settings.get_setting("hacks.enable"):
+                if settings.get_setting("hacks.redistribute_authors"):
                     prompt_dict = narrow_authors_in_prompt_dict(prompt_dict)
+                if settings.get_setting("hacks.swap_values"):
                     prompt_dict = alias_similar_keys(prompt_dict)
                 try:
                     prompt_dict, style, context, inst, length, story, system = generate_dataset_row_from_prompt_dict(
@@ -85,7 +86,6 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                         drop_tags_prob=settings.get_setting("prompt_format.tag_drop_rate"))
                     tokens_used = estimate_total_tokens([style, context, inst, story, system])
                 except Exception as e:
-                    print("Exception on file:", prompt_fp)
                     print("Exception on:", prompt_dict)
                     raise e
 
@@ -123,10 +123,10 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                 outfile.write(json.dumps(p) + "\n")
 
     final_metrics_dict = {}
-    # sort and filter out fields values with less than 3 results
+    # sort and filter out fields values with less than 10 results
     for field, distribution in info_dict.items():
         sorted_items = sorted(distribution.items(), key=lambda x: x[1], reverse=True)
-        sorted_dict = dict([i for i in sorted_items if i[1] > 3])
+        sorted_dict = dict([i for i in sorted_items if i[1] > 10])
         final_metrics_dict[field] = sorted_dict
     with open(info_path, 'w') as outfile:
         json.dump(final_metrics_dict, outfile, indent=2)

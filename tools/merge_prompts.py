@@ -1,19 +1,11 @@
 import os
 import tqdm
 import json
-import random
 
 from library.prompt_parser import sort_keys
 
 
 def process_folder_chunk_pass(merge_base_folder, merge_extract_folder, merge_keys, out_folder, queue=None):
-    """
-    queue process_chunk tasks
-
-    :param in_folder:
-    :param out_folder:
-    :return:
-    """
     for filename in tqdm.tqdm(os.listdir(merge_base_folder)):
         if os.path.isfile(os.path.join(merge_base_folder, filename)):
             output_filename = filename

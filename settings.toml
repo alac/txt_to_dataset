@@ -9,27 +9,34 @@ context_length = 8192
 [prompt_gen]
 #prompt_file_path = "processors/few_shot_templates/full_prompt.txt"
 prompt_file_path = "user/few_shot_templates/full_prompt.txt"
-# Typically, you would generate a prompt for the entire story.
-# "continuation" lets you split the story into two parts, a "context" and a "continuation".
-# The idea is to prevent later prompts from ignoring previous parts of the story.
+# continuation_likelyhood: "continuation" lets you split the story into two parts, a "context" and a "continuation".
+#   Then, you would generate a prompt for the "continuation" and train on "context + prompt" -> "continuation".
+#   The idea is to prevent ignoring previous parts of the story.
 continuation_likelyhood = 0.5
 
 [prompt_format]
-# Pretty print order of the json prompt files; unexpected keys will be at the end.
+# json_key_order: Pretty print order of the json files; unexpected keys will be at the end.
 json_key_order = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "male characters", "female characters", "context", "story"]
-# the fields that are preserved when the prompt jsons are converted into the dataset jsons.
+# allowed_fields: The fields that are preserved when the prompt jsons are converted into the dataset jsons.
 allowed_fields = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "context", "story", "system suffix"]
-# The rate that a tag is left out of prompt in the final dataset.
-# The idea is that the less tags there are, the stronger the influence training has on them.
+# tag_drop_rate: The rate that a tag is left out of prompt in the final dataset.
+#   The idea is that the less tags there are, the stronger the influence training has on them.
 tag_drop_rate = 0.5
-# Tags that will be influenced by the tag_drop_rate.
+# droppable_tags: Tags that will be influenced by the tag_drop_rate.
 droppable_tags = ['tone', 'writing style', 'pacing', 'sensory detail']
-# the % of prompts to go to the validation set instead of the main dataset. 0.0 to 1.0.
+# validation_set_size: the % of prompts to go to the validation set instead of the main dataset. 0.0 to 1.0.
 validation_set_size = 0.0
+
+[randomize_names]
+keys_containing_names = ["prompt", "humorous elements", "point of view", "male characters", "female characters",
+  "context", "story"]
+randomization_blacklist = ["The", "N/A", "Unnamed", "Death", "Man", "Woman", "Child", "Saint", "Teacher"]
 
 [hacks]
 # enables tweaks for my particular dataset
-enable = true
-use_prose_prompt = true
+undo_hyphens_in_prompt = true
+redistribute_authors = true
+swap_tag_values = true
+use_prose_styles = true

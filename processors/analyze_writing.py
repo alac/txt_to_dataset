@@ -1,6 +1,7 @@
 import json
 import re
 import os
+from typing import Union
 
 from library.settings_manager import settings
 from library.ai_requests import run_ai_request, EmptyResponseException
@@ -8,10 +9,23 @@ from library.token_count import get_token_count
 from library.english_constants import indirect_person_words, lazy_contraction_mapping
 
 
-def generate_prompts(story, blacklist=[], continuation=False, attempts=3, context_length=1950,
-                     override_prompt_path=None):
+def generate_prompts(story, blacklist=[], continuation=False, attempts=1, context_length=1000,
+                     override_prompt_path=None) -> (Union[None, dict], dict):
+    """
+    :param story: The text to generate a prompt dictionary for.
+    :param blacklist: A set of values that are disallowed from _any_ value in the prompt dictionary.
+    :param continuation: If true, splits part of the story into a 'context' that won't be used to generate the prompt.
+    :param attempts: The number of times to attempt an AI request to generate a prompt.
+    :param context_length: The ideal context length for the output; if attempts > 1, the valid result with the closest
+        length will win.
+    :param override_prompt_path: The filepath for a few shot prompt to send to the AI. It should have a {story}
+        template value.
+    :return: A tuple where:
+        The first element is None in the case of failure, or the result as a dict[str, str]
+        The second element is a dict[str, str], intended to be debug outputs (filename -> content)
+    """
+
     if continuation:
-        # break the text we want to generate a prompt for into a 'context' and the 'text'
         context_lines = []
         generated_lines = []
         all_lines = story.splitlines(keepends=False)
@@ -42,7 +56,6 @@ def generate_prompts(story, blacklist=[], continuation=False, attempts=3, contex
                                              {"story": story})
         except EmptyResponseException:
             response_dict = {}
-        # print(json.dumps(response_dict, indent=2))
 
         is_junk = False
         result_dict = {}

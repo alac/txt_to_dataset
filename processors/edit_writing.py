@@ -1,6 +1,7 @@
 import json
 import random
 
+from library.settings_manager import settings
 from library.english_constants import titles
 from library.prompt_parser import parse_names
 
@@ -30,8 +31,7 @@ def randomize_names(prompt_dict):
     new_last_names = random.sample(male_names, len(male_chars)) + random.sample(female_names, len(female_chars))
     original_names = male_chars + female_chars
 
-    keys_with_content = ["prompt", "humorous elements", "point of view", "male characters", "female characters",
-                         "context", "story"]
+    keys_with_content = settings.get_setting("randomize_names.keys_containing_names")
 
     all_replacements = {}
     for index, old_name in enumerate(original_names):
@@ -47,7 +47,7 @@ def randomize_names(prompt_dict):
             elif first_name.endswith("'s"):
                 first_name = first_name[:-2]
                 last_name = ""
-            elif first_name in ["The", "N/A", "Unnamed", "Death", "Man", "Woman", "Child", "Saint", "Teacher"]:
+            elif first_name in settings.get_setting("randomize_names.randomization_blacklist"):
                 first_name = ""
                 last_name = ""
 

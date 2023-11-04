@@ -106,6 +106,11 @@ similar_keys = {
         "dark": "dark humor",
         "dark comedy": "dark humor",
         "sarcastic": "sarcasm",
+    },
+    "sensory detail": {
+        "low": "abstract",
+        "medium": "selective",
+        "high": "vivid sensory",
     }
 }
 
@@ -184,6 +189,13 @@ def prompt_dict_to_style_string(prompt_dict: dict) -> dict:
         style += "\n" + tags_line
     style += "\n" + description
     return style
+
+
+def undo_hyphens(prompt):
+    if "Write a scene where\n-" in prompt:
+        prompt = prompt.replace("Write a scene where\n-", "Write a scene where: ")
+        return prompt.replace("\n-", " ").replace("  ", " ")
+    return prompt
 
 
 if __name__ == "__main__":

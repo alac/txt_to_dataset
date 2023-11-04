@@ -2,14 +2,7 @@ import random
 
 from library.token_count import get_token_count
 from library.settings_manager import settings
-from library.hacks_dataset_specific import prompt_dict_to_style_string
-
-
-def undo_hyphens(prompt):
-    if "Write a scene where\n-" in prompt:
-        prompt = prompt.replace("Write a scene where\n-", "Write a scene where: ")
-        return prompt.replace("\n-", " ").replace("  ", " ")
-    return prompt
+from library.hacks_dataset_specific import prompt_dict_to_style_string, undo_hyphens
 
 
 def sort_keys(prompt_dict, warn_unexpected_keys=False):
@@ -17,7 +10,6 @@ def sort_keys(prompt_dict, warn_unexpected_keys=False):
     unexpected_keys = [k for k in prompt_dict if k not in ordered_keys]
     if unexpected_keys and warn_unexpected_keys:
         print(f"Prompt Dictionary had unexpected keys: {unexpected_keys}")
-        # raise ValueError(f"Prompt Dictionary had unexpected keys: {unexpected_keys}")
 
     new_dict = {}
     for key in ordered_keys:
@@ -39,21 +31,11 @@ def get_full_text_from_prompt_dict(prompt_dict):
 
 def prepare_prompt_dict_for_row(prompt_dict):
     allowed_fields = settings.get_setting("prompt_format.allowed_fields")
-    aliased_fields = {
-        "sensory detail": {
-            "low": "abstract",
-            "medium": "selective",
-            "high": "vivid sensory",
-        }
-    }
 
     new_dict = {}
     for field in prompt_dict:
         if field in allowed_fields:
             new_dict[field] = prompt_dict[field]
-            if field in aliased_fields:
-                if prompt_dict[field] not in [None, ""]:
-                    new_dict[field] = aliased_fields[field].get(prompt_dict[field].lower(), prompt_dict[field].lower())
     return new_dict
 
 
@@ -61,7 +43,9 @@ def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, dropp
     context = prompt_dict.get("context", None)
     story = prompt_dict.get("story", "")
     prompt = prompt_dict.get("prompt", "")
-    prompt = undo_hyphens(prompt)
+
+    if settings.get_setting("hacks.undo_hyphens_in_prompt"):
+        prompt = undo_hyphens(prompt)
 
     none_value_keys = [k for k in prompt_dict if prompt_dict[k] is None]
     for key in none_value_keys:
@@ -73,7 +57,7 @@ def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, dropp
                 del prompt_dict[tag]
 
     style = ""
-    if settings.get_setting("hacks.use_prose_prompt"):
+    if settings.get_setting("hacks.use_prose_styles"):
         style = prompt_dict_to_style_string(prompt_dict)
     else:
         items = [i for i in prompt_dict.items()]
@@ -114,6 +98,6 @@ def parse_names(names_list: str) -> list[str]:
     return names
 
 
-def estimate_total_tokens(all_strs:list[str]):
+def estimate_total_tokens(all_strs: list[str]):
     format_tokens = 50  # the isolated "### System..."
     return get_token_count("".join([s for s in all_strs if s is not None])) + format_tokens
