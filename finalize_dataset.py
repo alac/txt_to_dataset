@@ -7,14 +7,9 @@ import tqdm
 from library.prompt_parser import generate_dataset_row_from_prompt_dict, prepare_prompt_dict_for_row,\
     estimate_total_tokens
 from library.settings_manager import settings
-
 from library.hacks_dataset_specific import narrow_authors_in_prompt_dict, alias_similar_keys
 
 PROMPT_CACHE = {}
-
-
-def get_random_boolean():
-    return random.random() < 0.5
 
 
 def track_prompt_metrics(prompt_dict, info_dict):
