@@ -68,7 +68,7 @@ def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, dropp
         items = [i for i in prompt_dict.items()]
         random.shuffle(items)
         for key, value in items:
-            if not value:
+            if key in ["context", "story", "prompt"] or not value:
                 continue
             style += f"{key}: {value.lower()}. "
 
