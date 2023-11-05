@@ -21,6 +21,8 @@ json_key_order = ["prompt", "tone", "writing style", "pacing", "point of view", 
 # allowed_fields: The fields that used to generate the 'style' field of the dataset row.
 allowed_fields = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "context", "story", "system suffix"]
+# replace_unicode_quotes: replaces unicode quotes with "
+replace_unicode_quotes_fields = ["story", "context"]
 # tag_drop_rate: The rate that a tag is left out of prompt in the final dataset.
 #   The idea is that the less tags there are, the stronger the influence training has on them.
 tag_drop_rate = 0.5

@@ -40,6 +40,11 @@ def prepare_prompt_dict_for_row(prompt_dict):
 
 
 def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, droppable_tags=[]):
+    for field in settings.get_setting("hacks.replace_unicode_quotes_fields"):
+        val = prompt_dict.get(field, None)
+        if val:
+            prompt_dict[field] = val.replace("\u201d", "\"").replace("\u201c", "\"")
+
     context = prompt_dict.get("context", None)
     story = prompt_dict.get("story", "")
     prompt = prompt_dict.get("prompt", "")
