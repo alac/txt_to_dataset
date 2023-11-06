@@ -1,5 +1,6 @@
 import tomli
 import os
+import json
 from typing import Any
 
 THIS_FILES_FOLDER = os.path.dirname(os.path.realpath(__file__))
@@ -36,7 +37,7 @@ def search_nested_dict(nested_dict: dict, dotted_key: str) -> Any:
     current_dict = nested_dict
     for k in keys:
         if k not in current_dict:
-            raise ValueError(f"setting {dotted_key} not found in {nested_dict.keys()}")
+            raise ValueError(f"setting {dotted_key} not found in {json.dumps(nested_dict, indent=2)}")
         current_dict = current_dict[k]
     return current_dict
 
