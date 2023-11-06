@@ -31,7 +31,7 @@ droppable_tags = []
 validation_set_size = 0.1
 
 [randomize_names]
-keys_containing_names = ["prompt", "humorous elements", "point of view", "male characters", "female characters",
+keys_containing_names = ["prompt", "point of view", "male characters", "female characters",
   "context", "story"]
 randomization_blacklist = ["The", "N/A", "Unnamed", "Death", "Man", "Woman", "Child", "Saint", "Teacher"]
 
