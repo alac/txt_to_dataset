@@ -72,7 +72,7 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                 prompt_dict = prepare_prompt_dict_for_row(prompt_dict)
                 if settings.get_setting("hacks.redistribute_authors"):
                     prompt_dict = narrow_authors_in_prompt_dict(prompt_dict)
-                if settings.get_setting("hacks.swap_values"):
+                if settings.get_setting("hacks.swap_tag_values"):
                     prompt_dict = alias_similar_keys(prompt_dict)
                 try:
                     prompt_dict, style, context, inst, length, story, system = generate_dataset_row_from_prompt_dict(
