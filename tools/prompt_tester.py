@@ -1,6 +1,7 @@
 import os
 import json
 import tqdm
+import argparse
 
 from library.ai_requests import run_ai_request
 
@@ -54,4 +55,19 @@ def iterate_over_all_possible_dictionaries(dictionary):
 
 
 if __name__ == "__main__":
-    run(r"tools/prompt_test_templates/story_template.txt", r"user/quality_tests/ww21", 1, 600)
+    parser = argparse.ArgumentParser(
+        usage="""Batch generate responses from an AI and write the results to a folder.
+Uses an input template and a json specifying template values to generate requests.
+
+python -m tools.prompt_tester --prompt_template tools/prompt_test_templates/story_template.txt
+    --output_folder out --trials 1 --response_length 600""")
+    parser.add_argument('--prompt_template', type=str, required=True, help='The base template filename. Each template '
+                        'is assumed to have a json that specifies the template values.')
+    parser.add_argument('--output_folder', type=str, required=True, help='Output folder path. Will be populated by '
+                        'the results of the AI requests.')
+    parser.add_argument('--trials', type=int, required=True, help='The number of attempts per template combination.')
+    parser.add_argument('--response_length', type=int, required=True, help='The max number of tokens to generate '
+                        'in each response.')
+    args = parser.parse_args()
+
+    run(args.prompt_template, args.output_folder, args.trials, args.respose_length)
