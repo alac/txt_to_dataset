@@ -103,7 +103,7 @@ Edit the values in INJECTION_SETTINGS.json as desired:
 ...
 Then run the script a second time to populate the output_folder with the modified files.
 
-python -m tools.inject_hardcoded_keys --input_folder in --output_folder out --key test""")
+python -m tools.inject_hardcoded_keys --input_folder in --output_folder out --keys test""")
     parser.add_argument('--input_folder', type=str, required=True, help='Input folder path. Should contain subfolders '
                         ' containing json files.')
     parser.add_argument('--output_folder', type=str, required=True, help='Output folder path. Will be populated by a '
