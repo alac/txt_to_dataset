@@ -1,6 +1,6 @@
 """
-inject_hardcoded_keys is for jamming in information manually on a 'story' level.
-for now, this means the name of the author.
+inject_hardcoded_keys is for manually setting values in a folder structure like /group/story/chunk.json.
+setting is done on a story level, so that you can set the 'author' or 'genre' manually.
 """
 
 import os
