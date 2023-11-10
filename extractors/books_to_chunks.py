@@ -64,6 +64,11 @@ def preprocess_text(content: str) -> list[str]:
             return True
         return False
 
+    def is_end_of_paragraph(l: str) -> bool:
+        if l.endswith("Mrs.") or l.endswith("Mrs."):
+            return False
+        return l.endswith(LINE_ENDINGS)
+
     for line in lines:
         line = line.strip()
         if len(line) == 0:
@@ -79,7 +84,7 @@ def preprocess_text(content: str) -> list[str]:
         else:
             continue
 
-        if line.endswith(LINE_ENDINGS):
+        if is_end_of_paragraph(line):
             paragraphs.append(" ".join(current_paragraph))
             current_paragraph = []
 
