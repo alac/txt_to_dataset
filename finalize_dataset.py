@@ -58,7 +58,7 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
                 continue
             for prompt_file in os.listdir(os.path.join(prompts_folder, story_name)):
                 prompt_fp = os.path.join(prompts_folder, story_name, prompt_file)
-                if os.path.isfile(prompt_fp) and prompt_file.endswith(".txt"):
+                if os.path.isfile(prompt_fp) and prompt_file.endswith(".json"):
                     queue.append(prompt_fp)
 
     for prompt_fp in tqdm.tqdm(queue):

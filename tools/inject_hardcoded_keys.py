@@ -67,7 +67,7 @@ def process_story_folder(in_folder, sub_folder, out_folder, story_settings):
     os.makedirs(story_folder, exist_ok=True)
 
     for filename in os.listdir(source_folder):
-        if not filename.endswith(".txt") or not os.path.isfile(os.path.join(source_folder, filename)):
+        if not filename.endswith(".json") or not os.path.isfile(os.path.join(source_folder, filename)):
             continue
         if os.path.exists(os.path.join(story_folder, filename)):
             print(f"skipping chunk: {source_folder}, {filename}")

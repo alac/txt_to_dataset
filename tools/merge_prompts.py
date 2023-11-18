@@ -14,7 +14,7 @@ def process_folder_chunk_pass(merge_base_folder, merge_extract_folder, merge_key
         if os.path.isfile(os.path.join(merge_base_folder, filename)):
             output_filename = filename
             output_path = os.path.join(out_folder, output_filename)
-            if not os.path.exists(output_path) and filename.endswith(".txt"):
+            if not os.path.exists(output_path) and filename.endswith(".json"):
                 cmd = lambda a=merge_base_folder, b=merge_extract_folder, c=filename, d=merge_keys, e=out_folder: \
                     process_chunk(a, b, c, d, e)
                 if queue is not None:

@@ -22,7 +22,7 @@ KEY_REPLACED_NAMES = f"replaced_names"
 
 def process_folder_chunk_pass(in_folder, out_folder, mode, misc={}, queue=None):
     """
-    take a folder of ksj scripts and write each converted script to the out folder
+    take a folder of files, apply a THING to them, and dump them to the out folder
 
     :param in_folder:
     :param out_folder:
@@ -32,7 +32,7 @@ def process_folder_chunk_pass(in_folder, out_folder, mode, misc={}, queue=None):
         if os.path.isfile(os.path.join(in_folder, filename)):
             output_filename = filename
             output_path = os.path.join(out_folder, output_filename)
-            if not os.path.exists(output_path) and filename.endswith(".txt"):
+            if not os.path.exists(output_path) and filename.endswith(".json"):
                 cmd = lambda a=in_folder, b=filename, c=out_folder, d=mode, e=misc: \
                     process_chunk(a, b, c, d, misc=e)
                 if queue is not None:
@@ -99,14 +99,15 @@ def process_chunk(in_folder, filename, out_folder, mode, misc={}):
     else:
         raise ValueError(f"process_chunk got unexpected mode: {mode}")
 
-    output_path = os.path.join(out_folder, filename)
+    out_filename = filename.replace(".txt", f".json")
+    output_path = os.path.join(out_folder, out_filename)
     if result and len(result):
         with open(output_path, 'w', encoding='utf-8') as file:
             file.writelines(result)
     if debug_files:
         for suffix, contents in debug_files.items():
             if contents:
-                output_path = os.path.join(out_folder, "extras", filename.replace(".txt", f"{suffix}.txt"))
+                output_path = os.path.join(out_folder, "extras", out_filename.replace(".json", f"{suffix}.json"))
                 with open(output_path, 'w', encoding='utf-8') as file:
                     file.writelines(contents)
 
