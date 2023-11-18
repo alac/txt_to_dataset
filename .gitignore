@@ -2,5 +2,6 @@
 *.xml
 /testing/
 /user/
+/venv/
 response.txt
 user.toml
