@@ -1,4 +1,4 @@
-
+import argparse
 import os
 import tqdm
 import time
@@ -171,3 +171,30 @@ def batch_randomize_names(in_folder: str, out_folder: str):
     names_json_path = os.path.join(ROOT_FOLDER, os.path.join(out_folder, "replaced_names.json"))
     with open(names_json_path, 'w', encoding='utf-8') as file:
         file.writelines(json.dumps(replaced_names, indent=4))
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        usage="""Batch processing for prompts, applying the chosen process to each file in each subfolder of the input folder.
+
+MODE_GENERATE_PROMPT = Makes an request to an ai model (configurable in settings.toml) and generates a prompt (and metadata) for the file.
+
+MODE_COUNT_PHRASES = Counts 3 repeated word phrases on the subfolder level and globally.
+Used to determine whether phrases are over-represented in the dataset.
+
+MODE_RANDOMIZE_NAMES = Uses the name metadata in a prompt file to randomize names in the story.
+Useful if the dataset has a bias towards particular names.
+
+python -m process_prompts --input_folder in --output_folder out --keys MODE_GENERATE_PROMPT""")
+    parser.add_argument('--input_folder', type=str, required=True,
+                        help='Input folder path. Should contain subfolders containing story chunks (.txt) or prompt'
+                             ' (.json) files.')
+    parser.add_argument('--output_folder', type=str, required=True,
+                        help='Output folder path. Will be populated by a mirrored structure as the input folder, with '
+                             'modified json files.')
+    parser.add_argument('--mode', type=str, required=True,
+                        help='Determines what processing to apply: MODE_GENERATE_PROMPT, MODE_COUNT_PHRASES, '
+                             'MODE_RANDOMIZE_NAMES.')
+    args = parser.parse_args()
+
+    process_prompts(args.input_folder, args.output_folder, args.mode)
