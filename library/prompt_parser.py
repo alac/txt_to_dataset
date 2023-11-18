@@ -5,7 +5,7 @@ from library.settings_manager import settings
 from library.hacks_dataset_specific import prompt_dict_to_style_string, undo_hyphens
 
 
-def sort_keys(prompt_dict, warn_unexpected_keys=False):
+def sort_keys(prompt_dict: dict, warn_unexpected_keys=False):
     ordered_keys = settings.get_setting("prompt_format.json_key_order")
     unexpected_keys = [k for k in prompt_dict if k not in ordered_keys]
     if unexpected_keys and warn_unexpected_keys:
@@ -21,7 +21,7 @@ def sort_keys(prompt_dict, warn_unexpected_keys=False):
     return new_dict
 
 
-def get_full_text_from_prompt_dict(prompt_dict):
+def get_full_text_from_prompt_dict(prompt_dict: dict):
     story = prompt_dict["story"]
     context = prompt_dict.get("context", None)
     if context:
@@ -29,7 +29,7 @@ def get_full_text_from_prompt_dict(prompt_dict):
     return story
 
 
-def prepare_prompt_dict_for_row(prompt_dict):
+def prepare_prompt_dict_for_row(prompt_dict: dict):
     allowed_fields = settings.get_setting("prompt_format.allowed_fields")
 
     new_dict = {}
@@ -39,7 +39,7 @@ def prepare_prompt_dict_for_row(prompt_dict):
     return new_dict
 
 
-def generate_dataset_row_from_prompt_dict(prompt_dict, drop_tags_prob=0.0, droppable_tags=[]):
+def generate_dataset_row_from_prompt_dict(prompt_dict: dict, drop_tags_prob: float, droppable_tags: list):
     for field in settings.get_setting("prompt_format.replace_unicode_quotes_fields"):
         val = prompt_dict.get(field, None)
         if val:
