@@ -4,6 +4,7 @@ import websocket
 import json
 import os
 from typing import Tuple
+import sseclient
 
 from library.settings_manager import settings, ROOT_FOLDER
 from library.token_count import get_token_count
@@ -23,8 +24,7 @@ f"USER: {prompt}\nASSISTANT: {response_start}", ['\nUSER:', '\nASSISTANT:']
 def run_ai_request(prompt: str, response_start: str, custom_stopping_strings: list[str] = [], temperature: float = .1,
                    clean_blank_lines: bool = True, max_response: int = 1536, formatter: str = None,
                    ban_eos_token: bool = True, print_progress: bool = True):
-    blocking_url = settings.get_setting('oobabooga_api.blocking_url')
-    streaming_url = settings.get_setting('oobabooga_api.streaming_url')
+    request_url = settings.get_setting('oobabooga_api.request_url')
 
     stopping_strings = []
     formatted_prompt = prompt
@@ -44,77 +44,67 @@ def run_ai_request(prompt: str, response_start: str, custom_stopping_strings: li
         raise ValueError(f"run_ai_request: the prompt ({prompt_length}) and response length ({max_response}) are "
                          f"longer than max context! ({max_context})")
 
-    request = {
-        'prompt': formatted_prompt,
-        'max_new_tokens': max_response,
-        'auto_max_new_tokens': False,
-
-        'preset': settings.get_setting('oobabooga_api.preset_name'),
-        'do_sample': True,
-        'temperature': temperature,
-        'top_p': 0.98,
-        'typical_p': 1,
-        'repetition_penalty': 1.05,
-        'encoder_repetition_penalty': 1,
-        'top_k': 0,
-        'min_length': 0,
-        'no_repeat_ngram_size': 0,
-        'num_beams': 1,
-        'penalty_alpha': 0,
-        'length_penalty': 1,
-        'guidance_scale': 1,
-        'negative_prompt': '',
-        'seed': -1,
-        'early_stopping': False,
-        'add_bos_token': False,
-        'stopping_strings': stopping_strings + custom_stopping_strings,
-        'truncation_length': max_context - max_response,
-        'ban_eos_token': ban_eos_token,
-        'skip_special_tokens': True,
-        'top_a': 0,
-        'tfs': 1,
-        'mirostat_mode': 0,
-        'mirostat_tau': 5,
-        'mirostat_eta': 0.1,
+    headers = {
+        "Content-Type": "application/json"
     }
 
-    if settings.get_setting('oobabooga_api.use_streaming'):
-        ws = None
-        progress = None
-        try:
-            ws = websocket.WebSocket()
-            ws.connect(streaming_url)
-
-            ws.send(json.dumps(request))
-
-            result = ""
-            if print_progress:
-                progress = tqdm.tqdm()
-            with open(os.path.join(ROOT_FOLDER, "response.txt"), "w") as f:
-                while True:
-                    chunk = ws.recv()
-                    if chunk is None:
-                        break
-                    response_json = json.loads(chunk)
-                    event = response_json.get("event", "")
-                    if event == "stream_end":
-                        break
-                    text = response_json.get("text", None)
-                    if progress is not None:
-                        progress.set_postfix_str(chunk)
-                    if text:
-                        result += text
-                        f.write(text)
-        finally:
-            if progress is not None:
-                progress.close()
-            if ws is not None:
-                ws.close()
+    data = {
+        "prompt": formatted_prompt,
+        'temperature': temperature,
+        "max_tokens": max_response,
+        'truncation_length': max_context - max_response,
+        'stop': stopping_strings + custom_stopping_strings,
+        'ban_eos_token': ban_eos_token,
+        "stream": True,
+    }
+    preset = settings.get_setting('oobabooga_api.preset_name')
+    if preset.lower() not in ['', 'none']:
+        data['preset'] = preset
     else:
-        response = requests.post(blocking_url, json=request)
-        if response.status_code != 200:
-            return None
-        result = response.json()['results'][0]['text']
+        extra_settings = {
+            'min_p': 0.05,
+            'top_k': 0,
+            'repetition_penalty': 1.05,
+            'repetition_penalty_range': 1024,
+            'typical_p': 1,
+            'tfs': 1,
+            'top_a': 0,
+            'epsilon_cutoff': 0,
+            'eta_cutoff': 0,
+            'guidance_scale': 1,
+            'negative_prompt': '',
+            'penalty_alpha': 0,
+            'mirostat_mode': 0,
+            'mirostat_tau': 5,
+            'mirostat_eta': 0.1,
+            'temperature_last': False,
+            'do_sample': True,
+            'seed': -1,
+            'encoder_repetition_penalty': 1,
+            'no_repeat_ngram_size': 0,
+            'min_length': 0,
+            'num_beams': 1,
+            'length_penalty': 1,
+            'early_stopping': False,
+            'add_bos_token': False,
+            'skip_special_tokens': True,
+            'top_p': 0.98,
+        }
+        data.update(extra_settings)
+
+    stream_response = requests.post(request_url, headers=headers, json=data, verify=False, stream=True)
+    client = sseclient.SSEClient(stream_response)
+
+    result = ""
+    print(data['prompt'], end='')
+    with open(os.path.join(ROOT_FOLDER, "response.txt"), "w", encoding='utf-8') as f:
+        for event in client.events():
+            payload = json.loads(event.data)
+            new_text = payload['choices'][0]['text']
+            print(new_text, end='')
+            f.write(new_text)
+            result += new_text
+    print()
 
     if clean_blank_lines:
         result = "\n".join([l for l in result.splitlines() if len(l.strip()) > 0])

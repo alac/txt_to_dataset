@@ -1,10 +1,9 @@
 [oobabooga_api]
 use_streaming = true
-blocking_url = 'http://192.168.1.20:5000/api/v1/generate'
-streaming_url = 'ws://192.168.1.20:5005/api/v1/stream'
-# preset_name should be a oobabooga preset; None will use the defaults hardcoded into library/ai_requests.py
-preset_name = 'None'
+request_url = 'http://127.0.0.1:5000/v1/completions'
 context_length = 8192
+# preset_name should be a oobabooga preset; 'none' will use the defaults hardcoded into library/ai_requests.py
+preset_name = 'None'
 
 [prompt_gen]
 prompt_file_path = "processors/few_shot_templates/full_prompt.txt"
@@ -37,7 +36,7 @@ randomization_blacklist = ["The", "N/A", "Unnamed", "Death", "Man", "Woman", "Ch
 
 [hacks]
 # enables tweaks for my particular dataset
-undo_hyphens_in_prompt = false
+undo_hyphens_in_prompt = true
 redistribute_authors = false
 swap_tag_values = false
 use_prose_styles = false

@@ -18,6 +18,7 @@ requests==2.31.0
 sentencepiece==0.1.99
 setuptools==65.5.1
 six==1.16.0
+sseclient-py
 tomli==2.0.1
 tqdm==4.65.1
 tzdata==2023.3
