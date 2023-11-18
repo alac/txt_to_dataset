@@ -146,8 +146,6 @@ def count_phrases(story, story_counts, global_counts, count_state,
     if book_mode:
         prune_phrase_counts([story_counts, global_counts], 3)
 
-    return {}, {}
-
 
 def prune_phrase_counts(dicts, cap):
     for dict in dicts:
