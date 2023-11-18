@@ -24,10 +24,11 @@ python finalize_dataset.py --input_folder IN_FOLDER
 # You can specify multiple input folders by repeating the --input_folder arg.
 ```
 TODO:
-## Advanced Usage
+## Tools
+
 
 ## Credits
 This repo contains lists of male and female names sourced from:
-* https://github.com/datasets-io/male-first-names-en
+* https://github.com/datasets-io/female-first-names-en
 * https://github.com/datasets-io/male-first-names-en
 
