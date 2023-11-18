@@ -121,7 +121,6 @@ def alias_similar_keys(prompt_dict: dict) -> dict:
     - without a huge dataset, it's better to have one keyword per concept (e.g. instead of 'satire' and 'satirical'
     both being tags, we'd be better off with just one of them).
     :param prompt_dict:
-    :param min_samples: number of examples for the author to be used.
     :return:
     """
     for key in similar_keys:
@@ -137,7 +136,7 @@ def alias_similar_keys(prompt_dict: dict) -> dict:
             if " and " in val:
                 val = val.replace(" and ", ", and ").replace(",,", ",")
             if "with a touch of " in val:
-                val = val.replace("with a touch of ", "")
+                val = val.replace("with a touch of ", ",")
             parts = [p.strip() for p in val.split(",")]
             if parts[-1].startswith("and "):
                 parts[-1] = parts[-1][4:]
