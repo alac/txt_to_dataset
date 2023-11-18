@@ -6,27 +6,12 @@ from library.english_constants import titles
 from library.prompt_parser import parse_names
 
 
-female_names_cache = []
-male_names_cache = []
-
-
-def get_cached_names():
-    if len(female_names_cache) == 0:
-        with open("library/names_female.json", "r", encoding='utf-8') as f:
-            female_names_cache.extend(json.load(f))
-    if len(male_names_cache) == 0:
-        with open("library/names_male.json", "r", encoding='utf-8') as f:
-            male_names_cache.extend(json.load(f))
-    return female_names_cache, male_names_cache
-
-
-def randomize_names(prompt_dict):
+def randomize_names(prompt_dict:dict, female_names: list[str], male_names: list[str]):
     female_chars = parse_names(prompt_dict["female characters"])
     male_chars = parse_names(prompt_dict["male characters"])
     if len(male_chars) + len(female_chars) == 0:
         return prompt_dict, {}
 
-    female_names, male_names = get_cached_names()
     new_first_names = random.sample(male_names, len(male_chars)) + random.sample(female_names, len(female_chars))
     new_last_names = random.sample(male_names, len(male_chars)) + random.sample(female_names, len(female_chars))
     original_names = male_chars + female_chars

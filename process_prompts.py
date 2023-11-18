@@ -144,17 +144,23 @@ def batch_count_phrases(in_folder: str, out_folder: str):
 def batch_randomize_names(in_folder: str, out_folder: str):
     subpaths = get_subpaths_to_process(in_folder, out_folder)
 
+    with open("library/names_female.json", "r", encoding='utf-8') as f:
+        female_names = json.load(f)
+    with open("library/names_male.json", "r", encoding='utf-8') as f:
+        male_names = json.load(f)
+
     replaced_names = {}
     for subpath in tqdm.tqdm(subpaths):
-        script_chunk, prompt_dict = load_prompt_file(os.path.join(in_folder, subpath))
+        full_path = os.path.join(in_folder, subpath)
+        script_chunk, prompt_dict = load_prompt_file(full_path)
 
         if not prompt_dict:
-            raise ValueError("batch_randomize_names: expected prompt files to contain a json.")
+            raise ValueError(f"batch_randomize_names: expected prompt files to contain a json: {full_path}")
         for key in ["male characters", "female characters"]:
             if key not in prompt_dict:
-                raise ValueError(f"batch_randomize_names: expected prompt json to contain the key {key}.")
+                raise ValueError(f"batch_randomize_names: expected prompt json to contain the key {key}: {full_path}")
 
-        prompt_dict, all_replacements = randomize_names(prompt_dict)
+        prompt_dict, all_replacements = randomize_names(prompt_dict, female_names, male_names)
         for k in all_replacements:
             replaced_names[k] = all_replacements[k]
         result = json.dumps(sort_keys(prompt_dict), indent=4)
