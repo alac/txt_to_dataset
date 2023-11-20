@@ -1,9 +1,7 @@
 import requests
-import tqdm
-import websocket
 import json
 import os
-from typing import Tuple
+from typing import Optional
 import sseclient
 
 from library.settings_manager import settings, ROOT_FOLDER
@@ -14,11 +12,12 @@ class EmptyResponseException(ValueError):
     pass
 
 
-def run_ai_request(prompt: str, custom_stopping_strings: list[str] = [], temperature: float = .1,
+def run_ai_request(prompt: str, custom_stopping_strings: Optional[list[str]] = None, temperature: float = .1,
                    clean_blank_lines: bool = True, max_response: int = 1536, ban_eos_token: bool = True):
     request_url = settings.get_setting('oobabooga_api.request_url')
-
     max_context = settings.get_setting('oobabooga_api.context_length')
+    if not custom_stopping_strings:
+        custom_stopping_strings = []
     prompt_length = get_token_count(prompt)
     if prompt_length + max_response > max_context:
         raise ValueError(f"run_ai_request: the prompt ({prompt_length}) and response length ({max_response}) are "
@@ -27,7 +26,6 @@ def run_ai_request(prompt: str, custom_stopping_strings: list[str] = [], tempera
     headers = {
         "Content-Type": "application/json"
     }
-
     data = {
         "prompt": prompt,
         'temperature': temperature,
