@@ -10,20 +10,17 @@ USER_SETTINGS = os.path.join(ROOT_FOLDER, "user.toml")
 
 
 class SettingsManager:
-    def __init__(self, defaults_file_path: str, user_file_path: str):
-        self.defaults_file_path = defaults_file_path
-        self.user_file_path = user_file_path
+    def __init__(self):
         self.default_settings = {}
         self.user_settings = {}
         self.override_settings = None  # type: Optional[dict]
-        self.load_settings()
 
-    def load_settings(self):
-        with open(self.defaults_file_path, "rb") as f:
+    def load_settings(self, defaults_file_path: str, user_file_path: Optional[str]):
+        with open(defaults_file_path, "rb") as f:
             self.default_settings = tomli.load(f)
 
-        if os.path.exists(self.user_file_path):
-            with open(self.user_file_path, "rb") as f:
+        if user_file_path and os.path.exists(user_file_path):
+            with open(user_file_path, "rb") as f:
                 self.user_settings = tomli.load(f)
 
     def override_settings(self, file_path):
@@ -55,5 +52,5 @@ def search_nested_dict(nested_dict: dict, dotted_key: str) -> Any:
     return current_dict
 
 
-settings = SettingsManager(DEFAULT_SETTINGS, USER_SETTINGS)
-settings.load_settings()
+settings = SettingsManager()
+settings.load_settings(DEFAULT_SETTINGS, USER_SETTINGS)
