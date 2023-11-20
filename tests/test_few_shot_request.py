@@ -1,6 +1,6 @@
-import pytest
+from unittest import mock
 
-from library.few_shot_request import edit_few_shot_request, parse_few_shot_format
+from library.few_shot_request import edit_few_shot_request, parse_few_shot_format, few_shot_request
 
 
 def test_parse_few_shot_format_single_entry():
@@ -100,3 +100,36 @@ paragraph3"""
 >shoe size: 20
 
 >name: John""", "Check edit_few_shot_request works even when trying to remove a key that isn't there"
+
+
+@mock.patch('library.few_shot_request.run_ai_request')
+def test_few_shot_request(mock_run_request):
+    expected_ai_request = """>Name: The Sunshine Gang
+>Excess1: blah blah
+blah
+blah
+>Taste: Dirty
+>Location: Earth
+>Excess2: blah
+
+>Name: Steve
+>Excess1: blah blah
+blah
+blah"""
+    intended_ai_response = """>Taste: Dirty
+>Location: Earth
+>Excess2: blah
+"""
+
+    mock_run_request.return_value = intended_ai_response
+    result = few_shot_request("tests/few_shot_request_data/test_request.txt", {"name": "Steve"})
+
+    assert mock_run_request.called
+    assert mock_run_request.call_args == mock.call(
+        expected_ai_request,
+        custom_stopping_strings=["\n>Name:", "Name:"],
+        temperature=0.7,
+        max_response=600,
+        ban_eos_token=True)
+
+    assert result == {"Taste": "Dirty", "Location": "Earth"}

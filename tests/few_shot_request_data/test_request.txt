@@ -1,0 +1,16 @@
+>Name: The Sunshine Gang
+>Excess1: blah blah
+blah
+blah
+>Junk1: apple
+>Taste: Dirty
+>Junk2: apple apple
+apple
+apple
+>Location: Earth
+>Excess2: blah
+
+>Name: {name}
+>Excess1: blah blah
+blah
+blah

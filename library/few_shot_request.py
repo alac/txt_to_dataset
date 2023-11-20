@@ -52,7 +52,8 @@ So, the format is:
     result_dict = parse_few_shot_format(result)[0]
     remove_keys = settings_json.get("remove_keys_from_result", [])
     for remove_key in remove_keys:
-        del result_dict[remove_key]
+        if remove_key in result_dict:
+            del result_dict[remove_key]
 
     return result_dict
 
