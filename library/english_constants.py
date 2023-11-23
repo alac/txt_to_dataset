@@ -126,3 +126,6 @@ titles = {"Doctor", "Dr.", "Professor", "Prof.", "Dean", "Chancellor", "Presiden
           "Officer", "Chief", "Director", "Manager", "Supervisor",
           "Coordinator", "Specialist", "Technician", "Assistant", "Master", "Mistress", "Chieftain", "Elder",
           "Ambassador", "Consul", "Mayor", "Governor", "Senator", "Representative"}
+
+abbreviated_titles = ["Mr.", "Mrs.", "Dr.", "Ms.", "Prof.", "Capt.", "Lt.", "Cmdr.", "Sgt.", "Col.", "Gen.", "Rep.",
+                      "Hon.", "Sen.", "Gov.", "Rev.", "Sr.", "Jr.", "Pres."]

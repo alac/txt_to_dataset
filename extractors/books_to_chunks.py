@@ -2,6 +2,7 @@ import argparse
 import os
 import tqdm
 
+from library.english_constants import abbreviated_titles
 from library.token_count import get_token_count
 
 LINE_ENDINGS = (".", "?", "'", '"')
@@ -11,6 +12,9 @@ def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int)
     print("book_to_chunks processing: ", input_file)
     with open(input_file, 'r', encoding="utf-8", errors='ignore') as file:
         content = file.read()
+    # strip BOM since str.strip() won't do it.
+    if ord(content[0]) == 65279:
+        content = content[1:]
 
     paragraphs = preprocess_text(content)
     chunks = []
@@ -31,6 +35,9 @@ def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int)
             end_index = index
             token_count = paragraph_tokens
 
+        if index == len(paragraphs) - 1:
+            chunks.append("\n".join(paragraphs[start_index:end_index+1]))
+
     # Write chunks to separate text files in the output folder
     os.makedirs(output_folder, exist_ok=True)
     for i, chunk in enumerate(chunks):
@@ -49,7 +56,6 @@ def preprocess_text(content: str) -> list[str]:
     :param content:
     :return:
     """
-
     content = content.replace("’", "'")
     lines = content.split("\n")
 
@@ -65,7 +71,8 @@ def preprocess_text(content: str) -> list[str]:
         return False
 
     def is_end_of_paragraph(l: str) -> bool:
-        if l.endswith("Mrs.") or l.endswith("Mrs."):
+        title = [t for t in abbreviated_titles if l.endswith(t)]
+        if any(title):
             return False
         return l.endswith(LINE_ENDINGS)
 
@@ -102,9 +109,9 @@ def books_to_chunks(in_folder: str, out_folder: str, max_tokens: int):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(usage='Takes a folder of text files breaks each into max_token length files. \n'
-                                     'python -m extractors.books_to_chunks --input_folder /in '
-                                     '--output_folder /out --max_tokens 1700')
+    parser = argparse.ArgumentParser(
+        usage='Takes a folder of text files breaks each into max_token length files. \n'
+              'python -m extractors.books_to_chunks --input_folder /in --output_folder /out --max_tokens 1700')
     parser.add_argument('--input_folder', type=str, required=True, help='Input folder path. Should contain txt files '
                         'to be split into max_token length files.')
     parser.add_argument('--output_folder', type=str, required=True, help='Output folder path. An input file "Derp.txt" '
