@@ -48,3 +48,13 @@ def test_books_to_chunks_long_paragraph():
     assert chunk_2_contents.endswith("asperiores repellat.")
 
     folder_utils.reset_test_folder(out_folder)
+
+
+def test_books_to_chunks_long_paragraph_exclude():
+    in_folder = r"tests\books_to_chunks3\in"
+    out_folder = r"tests\books_to_chunks3\out"
+    expected_folder = r"tests\books_to_chunks3\expected"
+    folder_utils.reset_test_folder(out_folder)
+    books_to_chunks(in_folder, out_folder, 200, exclude_if_too_long=True)
+    folder_utils.compare_folders(os.path.join(out_folder, "the_bible"), os.path.join(expected_folder, "the_bible"))
+    folder_utils.reset_test_folder(out_folder)
