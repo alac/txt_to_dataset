@@ -21,8 +21,8 @@ def run(filepath: str, out_folder: str, trials: int, response_length: int):
     for prompt, out_file in tqdm.tqdm(get_prompt_and_outfile(template, replacements_json, out_folder, trials)):
         if os.path.exists(out_file):
             continue
-        result = run_ai_request(prompt, "", ["### System:", "### User:", "### Assistant:"], temperature=.8,
-                                ban_eos_token=True, max_response=response_length, print_progress=False)
+        result = run_ai_request(prompt, ["### System:", "### User:", "### Assistant:"], temperature=.8,
+                                ban_eos_token=True, max_response=response_length)
         with open(out_file, 'w') as f:
             f.write(prompt)
             f.write("\n")
