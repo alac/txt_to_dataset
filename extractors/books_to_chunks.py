@@ -3,12 +3,12 @@ import os
 import tqdm
 
 from library.english_constants import abbreviated_titles
-from library.token_count import get_token_count
+from library.token_count import get_token_count, get_tokens, decode_tokens
 
 LINE_ENDINGS = (".", "?", "'", '"')
 
 
-def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int) -> None:
+def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int, exclude_if_too_long: bool) -> None:
     print("book_to_chunks processing: ", input_file)
     with open(input_file, 'r', encoding="utf-8", errors='ignore') as file:
         content = file.read()
@@ -17,6 +17,8 @@ def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int)
         content = content[1:]
 
     paragraphs = preprocess_text(content)
+    paragraphs = apply_token_cap_to_paragraphs(paragraphs, exclude_if_too_long, max_tokens-1)
+
     chunks = []
     start_index = 0
     end_index = 0
@@ -101,11 +103,53 @@ def preprocess_text(content: str) -> list[str]:
     return paragraphs
 
 
-def books_to_chunks(in_folder: str, out_folder: str, max_tokens: int):
+def apply_token_cap_to_paragraphs(paragraphs: list[str], exclude_if_too_long: bool, max_tokens: int):
+    result = []
+    for paragraph in paragraphs:
+        tokens = get_tokens(paragraph)
+        if len(tokens) <= max_tokens:
+            result.append(paragraph)
+        elif exclude_if_too_long:
+            continue
+        else:
+            remaining_tokens = tokens
+            print(len(tokens))
+            while len(remaining_tokens):
+                if len(remaining_tokens) < max_tokens - 1:
+                    result.append(decode_tokens(remaining_tokens))
+                    break
+                end_token = max_tokens - 1
+                keep, carry = None, None
+                while end_token > 0:
+                    print(end_token, "end token", remaining_tokens[end_token])
+                    if "." == remaining_tokens[end_token]:
+                        keep, carry = remaining_tokens[end_token], None
+                        break
+                    if "▁" == remaining_tokens[end_token][0]:
+                        keep, carry = None, remaining_tokens[end_token]
+                        break
+                    if "▁" == remaining_tokens[end_token][-1]:
+                        keep, carry = remaining_tokens[end_token], None
+                        break
+                    end_token = end_token - 1
+                fragment_tokens = remaining_tokens[:end_token]
+                if keep:
+                    fragment_tokens.append(keep)
+                result.append(decode_tokens(fragment_tokens))
+                remaining_tokens = remaining_tokens[end_token+1:]
+                if carry:
+                    remaining_tokens = [carry] + remaining_tokens
+    return result
+
+
+def books_to_chunks(in_folder: str, out_folder: str, max_tokens: int, exclude_if_too_long: bool = False):
     for f in os.listdir(in_folder):
         if not f.endswith(".txt"):
             continue
-        break_text_into_chunks(os.path.join(in_folder, f), os.path.join(out_folder, f.replace(".txt", "")), max_tokens)
+        break_text_into_chunks(os.path.join(in_folder, f),
+                               os.path.join(out_folder, f.replace(".txt", "")),
+                               max_tokens,
+                               exclude_if_too_long=exclude_if_too_long)
 
 
 if __name__ == "__main__":
@@ -120,5 +164,8 @@ if __name__ == "__main__":
                         'Splits at paragraph boundaries, so the actual length of output files will vary. \n'
                         'Uses the default tokenizer for Llama and Llama2 (sentencepiece) to determine token count. \n'
                         'max_tokens should be your training length minus your expected prompt length. \n')
+    parser.add_argument('-exclude', action='store_true', help='Excludes paragraphs that are longer than max_tokens. \n'
+                        'By default, excessively long paragraphs will be broken at word boundaries. \n')
+
     args = parser.parse_args()
-    books_to_chunks(args.input_folder, args.output_folder, args.max_tokens)
+    books_to_chunks(args.input_folder, args.output_folder, args.max_tokens, args.exclude)

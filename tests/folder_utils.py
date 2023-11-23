@@ -49,3 +49,10 @@ def check_file_for_string(folder, subpath, strings_to_check):
         file_contents = f.read()
         for string_to_check in strings_to_check:
             assert string_to_check in file_contents, strings_to_check[string_to_check]
+
+
+def read_file(folder, subpath):
+    file_path = os.path.join(folder, subpath)
+    assert os.path.isfile(file_path), f"File '{file_path}' does not exist."
+    with open(file_path, 'r') as f:
+        return f.read()
