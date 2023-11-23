@@ -1,0 +1,25 @@
+{
+  "system": [
+    "",
+    "\nWrite a story in the style of romance novel.",
+    "\nWrite a detective novel.",
+    "\nThe story should be a fantasy epic.",
+    "\nThe writing should be in the style of a space opera."
+  ],
+  "style": [
+    "Tone: tense.\n",
+    "Tone: humorous.\n",
+    "Tone: surreal.\n",
+    "Tone: melancholic.\n",
+    "Writing Style: literary.\n",
+    "Writing Style: evocative.\n",
+    "Written with a slow pace, in vivid sensory detail with moment-to-moment detail.\n",
+    "Written with a fast pace, in abstract detail, from a Third Person (protagonist) perspective.\n",
+    "Written with a fast pace, in high detail, from a First Person (protagonist) perspective.\n"
+  ],
+  "prompt": [
+    "Write a scene where: Amber, a young pilot, finds herself lost in an underground cave.",
+    "Write a scene where: A former politician named Charles receives an unexpected note in the mail.",
+    "Write a scene where: Ash is an inexperienced captain of a ship, the Loose Seal. Having developed a crippling addiction to TikTok, Ash struggles to control the Loose Seal during a bout of turbulence. To make matters worse, it seems that someone or something is chasing the Loose Seal."
+  ]
+}
