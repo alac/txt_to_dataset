@@ -26,6 +26,8 @@ So, the format is:
     assert os.path.exists(template_filepath)
     with open(template_filepath, 'r', encoding='utf-8') as file:
         template = file.read()
+    if len(template) > 0 and template[-1] == "\n":
+        template = template[:-1]
 
     template_settings = template_filepath.replace(".txt", ".params.json")
     assert os.path.exists(template_settings)
