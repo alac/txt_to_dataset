@@ -1,5 +1,5 @@
 from extractors.books_to_chunks import books_to_chunks
-import folder_utils
+from tests import folder_utils
 import os
 
 

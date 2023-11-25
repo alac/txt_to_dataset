@@ -1,0 +1,9 @@
+[prompt_gen]
+prompt_file_path = "tests/process_prompts/test_prompt.txt"
+# continuation_likelyhood: "continuation" lets you split the story into two parts, a "context" and a "continuation".
+#   Then, you would generate a prompt for the "continuation" and train on "context + prompt" -> "continuation".
+continuation_likelyhood = 0
+
+[prompt_format]
+# json_key_order: Pretty print order of the json files; unexpected keys will be at the end.
+json_key_order = ["prompt", "male characters", "female characters", "story"]

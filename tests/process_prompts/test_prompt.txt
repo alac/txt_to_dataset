@@ -1,0 +1,25 @@
+>Story: [The text of a story.]
+>Language: English
+>Prompt: [A prompt describing the characters and the events that occur.]
+>Male Characters: [A list of male character names, or 'unnamed' if no name is given.]
+>Female Characters: [A list of female character names, or 'unnamed' if no name is given.]
+
+>Story: The car skidded to a stop, throwing Harry against the door. He braced himself against the dashboard as the tires spun, trying to find purchase on the icy road. The snow was coming down heavily now, obscuring his vision. He could barely see the other car, a dark blur in the distance.
+The other car was gaining on him. Harry could see the headlights getting closer. He knew he had to do something, or he would be run off the road. He reached for the gearshift, but his hands were shaking too much. He couldn't get a grip.
+The other car was right behind him now. Harry could see the driver's face, twisted with rage. He knew he was going to kill him.
+Harry closed his eyes and braced himself for impact. But then, at the last second, the other car swerved around him and disappeared into the night.
+Harry opened his eyes and took a deep breath. He had escaped, but he knew he wasn't safe yet. The other driver would be back.
+>Language: English
+>Prompt: Write a scene where
+- The main character is a man named Harry who is driving.
+- Harry's car skids on an icy road during a snowstorm.
+- His car skids to a stop, causing him to brace against the dashboard.
+- He sees another car approaching quickly, its headlights illuminating the darkness.
+- Harry struggles to shift gears, but his hands are shaking.
+- The other car swerves around him at the last moment, disappearing into the night.
+- Harry realizes the other driver intended to harm him and knows he must escape.
+>Male Characters: Harry
+>Female Characters: N/A
+
+>Story: {story}
+>Language: English
