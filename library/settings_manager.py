@@ -11,34 +11,34 @@ USER_SETTINGS = os.path.join(ROOT_FOLDER, "user.toml")
 
 class SettingsManager:
     def __init__(self):
-        self.default_settings = {}
-        self.user_settings = {}
-        self.override_settings = None  # type: Optional[dict]
+        self._default_settings = {}
+        self._user_settings = {}
+        self._override_settings = None  # type: Optional[dict]
 
     def load_settings(self, defaults_file_path: str, user_file_path: Optional[str]):
         with open(defaults_file_path, "rb") as f:
-            self.default_settings = tomli.load(f)
+            self._default_settings = tomli.load(f)
 
         if user_file_path and os.path.exists(user_file_path):
             with open(user_file_path, "rb") as f:
-                self.user_settings = tomli.load(f)
+                self._user_settings = tomli.load(f)
 
     def override_settings(self, file_path):
         with open(file_path, "rb") as f:
-            self.override_settings = tomli.load(f)
+            self._override_settings = tomli.load(f)
 
     def remove_override_settings(self):
-        self.override_settings = None
+        self._override_settings = None
 
     def get_setting(self, setting_name: str) -> Any:
-        main_settings = self.user_settings
-        if self.override_settings is not None:
-            main_settings = self.override_settings
+        main_settings = self._user_settings
+        if self._override_settings is not None:
+            main_settings = self._override_settings
 
         try:
             result = search_nested_dict(main_settings, setting_name)
         except ValueError:
-            result = search_nested_dict(self.default_settings, setting_name)
+            result = search_nested_dict(self._default_settings, setting_name)
         return result
 
 

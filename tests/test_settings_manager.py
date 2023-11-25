@@ -27,8 +27,8 @@ def test_search_nested_dict_missing_key():
 
 def test_settings_manager_basic():
     settings_manager = SettingsManager()
-    settings_manager.default_settings = {"foo": {"bar": "failure"}}
-    settings_manager.user_settings = {"foo": {"bar": "baz"}}
+    settings_manager._default_settings = {"foo": {"bar": "failure"}}
+    settings_manager._user_settings = {"foo": {"bar": "baz"}}
 
     dotted_key = "foo.bar"
     result = settings_manager.get_setting(dotted_key)
@@ -37,8 +37,8 @@ def test_settings_manager_basic():
 
 def test_settings_manager_fallback():
     settings_manager = SettingsManager()
-    settings_manager.default_settings = {"foo": {"bar": "baz"}}
-    settings_manager.user_settings = {}
+    settings_manager._default_settings = {"foo": {"bar": "baz"}}
+    settings_manager._user_settings = {}
 
     dotted_key = "foo.bar"
     result = settings_manager.get_setting(dotted_key)
