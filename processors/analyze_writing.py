@@ -156,7 +156,7 @@ def prune_phrase_counts(dicts, cap):
                 del dict[key]
 
 
-def finalize_count_phrases(count_state, out_folder="user\phrase_counts", min_repeats_in_a_story=5, min_stories_per_phrase=3):
+def finalize_count_phrases(count_state, out_folder=r"user\phrase_counts", min_repeats_in_a_story=5, min_stories_per_phrase=3):
     os.makedirs(out_folder, exist_ok=True)
 
     global_counts = None
