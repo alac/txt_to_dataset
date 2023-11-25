@@ -29,9 +29,6 @@ def sleep_for_x_hours(duration):
 
 
 def process_prompts(in_folder: str, out_folder: str, mode: str):
-    os.makedirs(out_folder, exist_ok=True)
-    os.makedirs(os.path.join(out_folder, "extras"), exist_ok=True)
-
     if mode == MODE_GENERATE_PROMPT:
         batch_generate_prompts(in_folder, out_folder)
     elif mode == MODE_COUNT_PHRASES:
@@ -61,7 +58,7 @@ def get_subpaths_to_process(in_folder: str, out_folder: str) -> list[str]:
             if os.path.isfile(out_path):
                 continue
             subpaths_filenames.append(os.path.join(subfolder, filename))
-    return subpaths_filenames
+    return sorted(subpaths_filenames)
 
 
 def load_prompt_file(filepath: str) -> tuple[str, dict]:
@@ -77,6 +74,8 @@ def load_prompt_file(filepath: str) -> tuple[str, dict]:
 
 
 def write_outputs(out_folder: str, filename: str, result: str, debug_files: dict[str,str]):
+    os.makedirs(out_folder, exist_ok=True)
+
     out_filename = filename.replace(".txt", f".json")
     output_path = os.path.join(out_folder, out_filename)
     if result and len(result):
@@ -85,6 +84,7 @@ def write_outputs(out_folder: str, filename: str, result: str, debug_files: dict
     if debug_files:
         for suffix, contents in debug_files.items():
             if contents:
+                os.makedirs(os.path.join(out_folder, "extras"), exist_ok=True)
                 output_path = os.path.join(out_folder,
                                            "extras",
                                            out_filename.replace(".json", f"{suffix}.json"))
