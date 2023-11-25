@@ -9,7 +9,7 @@ from tests import folder_utils
 
 @pytest.fixture()
 def test_settings(request):
-    settings_manager.settings.override_settings(r"tests\test_settings.toml")
+    settings_manager.settings.override_settings(r"tests\process_prompts_shared\test_settings.toml")
 
     def teardown():
         settings_manager.settings.remove_override_settings()
@@ -19,9 +19,9 @@ def test_settings(request):
 
 @mock.patch('library.few_shot_request.run_ai_request')
 def test_generate_prompts(mock_run_request, test_settings):
-    in_folder = r"tests\process_prompts\in"
-    out_folder = r"tests\process_prompts\out"
-    expected_folder = r"tests\process_prompts\expected"
+    in_folder = r"tests\process_prompts_generate\in"
+    out_folder = r"tests\process_prompts_generate\out"
+    expected_folder = r"tests\process_prompts_generate\expected"
     folder_utils.reset_test_folder(out_folder)
 
     response1 = """>Prompt: Write a scene where

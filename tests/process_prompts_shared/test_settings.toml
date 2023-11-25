@@ -1,5 +1,5 @@
 [prompt_gen]
-prompt_file_path = "tests/process_prompts/test_prompt.txt"
+prompt_file_path = "tests/process_prompts_shared/test_prompt.txt"
 # continuation_likelyhood: "continuation" lets you split the story into two parts, a "context" and a "continuation".
 #   Then, you would generate a prompt for the "continuation" and train on "context + prompt" -> "continuation".
 continuation_likelyhood = 0

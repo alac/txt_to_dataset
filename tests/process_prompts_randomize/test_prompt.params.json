@@ -1,7 +1,0 @@
-{
-  "remove_keys_from_prompt": [],
-  "stopping_strings": ["\n>Story:", "Story:"],
-  "temperature": 0.7,
-  "response_length": 600,
-  "remove_keys_from_result": []
-}
