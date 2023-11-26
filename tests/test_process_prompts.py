@@ -54,13 +54,21 @@ def test_randomize_names(mock_randomize_names, test_settings):
     expected_folder = r"tests\process_prompts_randomize\expected"
     folder_utils.reset_test_folder(out_folder)
 
-    prompt_dict1 = {"story": "sadlfkjasdl;fkjasdl;fjasdl;fkjasdl;kfjasd;l"}
+    prompt_dict1 = {"story": "apple"}
     replacements1 = {"tom": "jerry"}
-    prompt_dict2 = {"story": "sadlfkjasdl;fkjasdl;fjasdl;fkjasdl;kfjasd;l"}
+    prompt_dict2 = {"story": "banana"}
     replacements2 = {"bert": "ernie", "itchy": "scratchy"}
 
     mock_randomize_names.side_effect = [(prompt_dict1, replacements1), (prompt_dict2, replacements2)]
     process_prompts.process_prompts(in_folder, out_folder, "MODE_RANDOMIZE_NAMES")
+
+    call_1_dict = mock_randomize_names.mock_calls[0].args[0]
+    assert "She stepped out into the narrow, muddy street" in call_1_dict["story"]
+    assert len(mock_randomize_names.mock_calls[0].args[1]) > 0, "Female names must be passed in"
+    assert len(mock_randomize_names.mock_calls[0].args[2]) > 0, "Male names must be passed in"
+
+    call_2_dict = mock_randomize_names.mock_calls[1].args[0]
+    assert "Write a scene where\n- The main character is a lonely woman" in call_2_dict["prompt"]
 
     folder_utils.compare_folders(
         os.path.join(out_folder, "garbage"),
