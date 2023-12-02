@@ -1,4 +1,3 @@
-import json
 import random
 
 from library.settings_manager import settings
@@ -7,8 +6,8 @@ from library.prompt_parser import parse_names
 
 
 def randomize_names(prompt_dict:dict, female_names: list[str], male_names: list[str]):
-    female_chars = parse_names(prompt_dict["female characters"])
-    male_chars = parse_names(prompt_dict["male characters"])
+    female_chars = parse_names(prompt_dict.get("female characters", ""))
+    male_chars = parse_names(prompt_dict.get("male characters", ""))
     if len(male_chars) + len(female_chars) == 0:
         return prompt_dict, {}
 
@@ -41,7 +40,8 @@ def randomize_names(prompt_dict:dict, female_names: list[str], male_names: list[
         for old, new in swaps:
             if len(old):
                 modded_name = modded_name.replace(old, new)
-        all_replacements[old_name] = modded_name
+        if modded_name != old_name:
+            all_replacements[old_name] = modded_name
 
         for old, new in swaps:
             if len(old) == 0:

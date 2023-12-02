@@ -93,6 +93,9 @@ def generate_dataset_row_from_prompt_dict(prompt_dict: dict, drop_tags_prob: flo
 
 def parse_names(names_list: str) -> list[str]:
     # not comprehensive; we just want to exclude things like "The old man" and "unnamed protagonist"
+    if len(names_list) == 0:
+        return []
+
     potential_names = names_list.split(",")
     names = []
     for name in potential_names:

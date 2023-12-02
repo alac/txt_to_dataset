@@ -7,3 +7,6 @@ continuation_likelyhood = 0
 [prompt_format]
 # json_key_order: Pretty print order of the json files; unexpected keys will be at the end.
 json_key_order = ["prompt", "male characters", "female characters", "story"]
+
+[randomize_names]
+keys_containing_names = ["story", "male characters", "female characters"]
