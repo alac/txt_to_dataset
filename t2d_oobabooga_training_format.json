@@ -1,0 +1,6 @@
+{
+    "instruction,output": "### System:\nA chat between a user and a writing assistant.\n\n### User:\n%instruction%\n\n### Assistant:\n%output%",
+    "context,instruction,output": "### System:\nA chat between a user and a writing assistant.\n\n### Assistant:\n%context%\n\n### User:\n%instruction%\n\n### Assistant:\n%output%",
+    "system,instruction,output": "### System:\nA chat between a user and a writing assistant.\n%system%\n\n### User:\n%instruction%\n\n### Assistant:\n%output%",
+    "system,context,instruction,output": "### System:\nA chat between a user and a writing assistant.\n%system%\n\n### Assistant:\n%context%\n\n### User:\n%instruction%\n\n### Assistant:\n%output%"
+}

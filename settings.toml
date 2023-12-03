@@ -3,7 +3,7 @@ use_streaming = true
 request_url = 'http://127.0.0.1:5000/v1/completions'
 context_length = 8192
 # preset_name should be a oobabooga preset; 'none' will use the defaults hardcoded into library/ai_requests.py
-preset_name = 'None'
+preset_name = 'none'
 
 [prompt_gen]
 prompt_file_path = "processors/few_shot_templates/full_prompt.txt"
@@ -20,12 +20,12 @@ json_key_order = ["prompt", "tone", "writing style", "pacing", "point of view", 
 allowed_fields = ["prompt", "tone", "writing style", "pacing", "point of view", "moment-to-moment detail",
   "sensory detail", "context", "story", "system suffix"]
 # replace_unicode_quotes: replaces unicode quotes with ". For example, "story", "context".
-replace_unicode_quotes_fields = []
+replace_unicode_quotes_fields = ["story", "context"]
 # tag_drop_rate: The rate that a tag is left out of prompt in the final dataset.
 #   The idea is that the less tags there are, the stronger the influence training has on them.
 tag_drop_rate = 0.5
 # droppable_tags: Tags that will be influenced by the tag_drop_rate.
-droppable_tags = []
+droppable_tags = ['tone', 'writing style', 'pacing', 'sensory detail']
 # validation_set_size: the % of prompts to go to the validation set instead of the main dataset. 0.0 to 1.0.
 validation_set_size = 0.1
 
@@ -39,4 +39,4 @@ randomization_blacklist = ["The", "N/A", "Unnamed", "Death", "Man", "Woman", "Ch
 undo_hyphens_in_prompt = true
 redistribute_authors = false
 swap_tag_values = false
-use_prose_styles = false
+use_prose_styles = true
