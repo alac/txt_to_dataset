@@ -70,4 +70,4 @@ python -m tools.prompt_tester --prompt_template tools/prompt_test_templates/stor
                         'in each response.')
     args = parser.parse_args()
 
-    run(args.prompt_template, args.output_folder, args.trials, args.respose_length)
+    run(args.prompt_template, args.output_folder, args.trials, args.response_length)
