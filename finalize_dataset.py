@@ -1,7 +1,7 @@
+import argparse
 import os
 import json
 import random
-
 import tqdm
 
 from library.prompt_parser import generate_dataset_row_from_prompt_dict, prepare_prompt_dict_for_row,\
@@ -137,6 +137,8 @@ def random_split(array, split_ratio):
 
 
 def generate_datasets(input_folders, output_folder, write_all_combinations=True, max_tokens=None, min_tokens=None):
+    os.makedirs(output_folder, exist_ok=True)
+
     name_to_folder = {}
     for in_folder in input_folders:
         name = os.path.basename(in_folder.strip(os.path.sep))
@@ -169,3 +171,24 @@ def generate_datasets(input_folders, output_folder, write_all_combinations=True,
             max_tokens=max_tokens,
             min_tokens=min_tokens
         )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(
+        usage="""Combines prompt jsons into a 'dataset.json' ready for training in Oobabooga.
+
+python -m finalize_dataset --input_folder user/fiction user/history --output_folder user/datasets --max_tokens 1200""")
+    parser.add_argument('--input_folder', nargs='+', help='One or more folders containing subfolders'
+                        ' containing prompts.', required=True)
+    parser.add_argument('--output_folder', type=str, required=True,
+                        help='Output folder path. Will be populated by the json file(s).')
+    parser.add_argument('--min_tokens', type=int, required=False,
+                        help='Only prompts that exceed min_tokens in length will be processed.')
+    parser.add_argument('--max_tokens', type=int, required=False,
+                        help='Only prompts that are under max_tokens in length will be processed.')
+    parser.add_argument('--write_all_combinations', type=bool, required=False, default=False,
+                        help='If there are multiple input folders, write datasets for all combinations of them.')
+
+    args = parser.parse_args()
+    generate_datasets(args.input_folder, args.output_folder, write_all_combinations=args.write_all_combinations,
+                      max_tokens=args.max_tokens,min_tokens=args.min_tokens)
