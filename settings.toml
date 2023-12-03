@@ -1,11 +1,15 @@
 [oobabooga_api]
-use_streaming = true
 request_url = 'http://127.0.0.1:5000/v1/completions'
 context_length = 8192
 # preset_name should be a oobabooga preset; 'none' will use the defaults hardcoded into library/ai_requests.py
 preset_name = 'none'
 
 [prompt_gen]
+# A few shot template for generating a prompt.
+#   A good template provides 2 or 3 examples.
+#   The each example is a series of key value pairs like ">key:value".
+#   Successive key-value pairs are grouped together while a newline separates one example from the next.
+#   The {story} placeholder will be replaced with the input story chunk.
 prompt_file_path = "processors/few_shot_templates/full_prompt.txt"
 # continuation_likelyhood: "continuation" lets you split the story into two parts, a "context" and a "continuation".
 #   Then, you would generate a prompt for the "continuation" and train on "context + prompt" -> "continuation".
