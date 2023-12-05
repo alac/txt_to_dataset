@@ -23,7 +23,7 @@ def run(filepath: str, out_folder: str, trials: int, response_length: int):
             continue
         result = run_ai_request(prompt, ["### System:", "### User:", "### Assistant:"], temperature=.8,
                                 ban_eos_token=True, max_response=response_length)
-        with open(out_file, 'w') as f:
+        with open(out_file, 'w', encoding="utf-8") as f:
             f.write(prompt)
             f.write("\n")
             f.write(result)
