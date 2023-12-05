@@ -6,7 +6,7 @@ import json
 import random
 
 from library.settings_manager import settings, ROOT_FOLDER
-from library.prompt_parser import sort_keys, get_full_text_from_prompt_dict
+from library.prompt_parser import sort_keys, get_full_text_from_prompt_dict, load_prompt_file
 from processors.analyze_writing import count_phrases, generate_prompts, finalize_count_phrases
 from processors.edit_writing import randomize_names
 
@@ -59,18 +59,6 @@ def get_subpaths_to_process(in_folder: str, out_folder: str) -> list[str]:
                 continue
             subpaths_filenames.append(os.path.join(subfolder, filename))
     return sorted(subpaths_filenames)
-
-
-def load_prompt_file(filepath: str) -> tuple[str, dict]:
-    print("Processing file:", filepath)
-    with open(filepath, 'r', encoding='utf-8') as file:
-        script_chunk = file.read()
-    prompt_dict = None
-    try:
-        prompt_dict = json.loads(script_chunk)
-    except ValueError:  # as a convenience, try to load the script as a dictionary
-        pass
-    return script_chunk, prompt_dict
 
 
 def write_outputs(out_folder: str, filename: str, result: str, debug_files: dict[str,str]):

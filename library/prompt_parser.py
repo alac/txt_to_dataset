@@ -1,3 +1,4 @@
+import json
 import random
 
 from library.token_count import get_token_count
@@ -109,3 +110,15 @@ def parse_names(names_list: str) -> list[str]:
 def estimate_total_tokens(all_strs: list[str]):
     format_tokens = 50  # the isolated "### System..."
     return get_token_count("".join([s for s in all_strs if s is not None])) + format_tokens
+
+
+def load_prompt_file(filepath: str) -> tuple[str, dict]:
+    print("Processing file:", filepath)
+    with open(filepath, 'r', encoding='utf-8') as file:
+        script_chunk = file.read()
+    prompt_dict = None
+    try:
+        prompt_dict = json.loads(script_chunk)
+    except ValueError:  # as a convenience, try to load the script as a dictionary
+        pass
+    return script_chunk, prompt_dict

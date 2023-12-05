@@ -1,22 +1,9 @@
 import argparse
 import os
 import tqdm
-import json
 import pandas as pd
 
-from library.prompt_parser import get_full_text_from_prompt_dict
-
-
-def load_prompt_file(filepath: str) -> tuple[str, dict]:
-    print("Processing file:", filepath)
-    with open(filepath, 'r', encoding='utf-8') as file:
-        script_chunk = file.read()
-    prompt_dict = None
-    try:
-        prompt_dict = json.loads(script_chunk)
-    except ValueError:  # as a convenience, try to load the script as a dictionary
-        pass
-    return script_chunk, prompt_dict
+from library.prompt_parser import get_full_text_from_prompt_dict, load_prompt_file
 
 
 def generate_parquet(in_folder: str, out_file: str):
