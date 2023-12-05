@@ -41,7 +41,7 @@ def populate_story_settings(all_in_folders, keys):
                     story_settings[folder] = {}
                 for folder in story_settings:
                     for key in keys:
-                        story_settings[folder]["key"] = story_settings[folder].get("key", "")
+                        story_settings[folder][key] = story_settings[folder].get(key, "")
                 f.seek(0)
                 json.dump(story_settings, f, indent=2, cls=ValueEncoder)
                 updated_story_settings.append(injection_settings_fp)
