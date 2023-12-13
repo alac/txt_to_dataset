@@ -5,6 +5,7 @@ import time
 import json
 import random
 
+from library.batching_utils import get_subpaths_to_process, write_output_and_debug_files
 from library.settings_manager import settings, ROOT_FOLDER
 from library.prompt_parser import sort_keys, get_full_text_from_prompt_dict, load_prompt_file
 from processors.analyze_writing import count_phrases, generate_prompts, finalize_count_phrases
@@ -39,47 +40,6 @@ def process_prompts(in_folder: str, out_folder: str, mode: str):
         raise ValueError(f"process_chunk got unexpected mode: {mode}")
 
 
-def get_subpaths_to_process(in_folder: str, out_folder: str) -> list[str]:
-    """
-    for every file in a subfolder of in_folder, return the subpath relative to in_folder.
-    except if a parallel file exists in the out_folder.
-
-    :param in_folder:
-    :param out_folder:
-    :return:
-    """
-    subpaths_filenames = []
-
-    for subfolder in os.listdir(in_folder):
-        if not os.path.isdir(os.path.join(in_folder, subfolder)):
-            continue
-        for filename in os.listdir(os.path.join(in_folder, subfolder)):
-            out_path = os.path.join(out_folder, subfolder, filename.replace(".txt", ".json"))
-            if os.path.isfile(out_path):
-                continue
-            subpaths_filenames.append(os.path.join(subfolder, filename))
-    return sorted(subpaths_filenames)
-
-
-def write_outputs(out_folder: str, filename: str, result: str, debug_files: dict[str,str]):
-    os.makedirs(out_folder, exist_ok=True)
-
-    out_filename = filename.replace(".txt", f".json")
-    output_path = os.path.join(out_folder, out_filename)
-    if result and len(result):
-        with open(output_path, 'w', encoding='utf-8') as file:
-            file.writelines(result)
-    if debug_files:
-        for suffix, contents in debug_files.items():
-            if contents:
-                os.makedirs(os.path.join(out_folder, "extras"), exist_ok=True)
-                output_path = os.path.join(out_folder,
-                                           "extras",
-                                           out_filename.replace(".json", f"{suffix}.json"))
-                with open(output_path, 'w', encoding='utf-8') as file:
-                    file.writelines(contents)
-
-
 def batch_generate_prompts(in_folder: str, out_folder: str):
     subpaths = get_subpaths_to_process(in_folder, out_folder)
 
@@ -104,10 +64,12 @@ def batch_generate_prompts(in_folder: str, out_folder: str):
         for k, v in new_values.items():
             prompt_dict[k] = v
 
-        result = json.dumps(sort_keys(prompt_dict), indent=4)
-
         directory, filename = os.path.split(subpath)
-        write_outputs(os.path.join(out_folder, directory), filename, result, debug_files)
+        result = json.dumps(sort_keys(prompt_dict), indent=4)
+        write_output_and_debug_files(os.path.join(out_folder, directory),
+                                     filename.replace(".txt", f".json"),
+                                     result,
+                                     debug_files)
 
 
 def batch_count_phrases(in_folder: str, out_folder: str):
@@ -151,10 +113,13 @@ def batch_randomize_names(in_folder: str, out_folder: str):
         prompt_dict, all_replacements = randomize_names(prompt_dict, female_names, male_names)
         for k in all_replacements:
             replaced_names[k] = all_replacements[k]
-        result = json.dumps(sort_keys(prompt_dict), indent=4)
 
         directory, filename = os.path.split(subpath)
-        write_outputs(os.path.join(out_folder, directory), filename, result, {})
+        result = json.dumps(sort_keys(prompt_dict), indent=4)
+        write_output_and_debug_files(os.path.join(out_folder, directory),
+                                     filename.replace(".txt", f".json"),
+                                     result,
+                                     {})
 
     names_json_path = os.path.join(ROOT_FOLDER, os.path.join(out_folder, "replaced_names.json"))
     with open(names_json_path, 'w', encoding='utf-8') as file:
