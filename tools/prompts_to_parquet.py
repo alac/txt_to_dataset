@@ -2,6 +2,7 @@ import argparse
 import os
 import tqdm
 import pandas as pd
+import random
 
 from library.prompt_parser import get_full_text_from_prompt_dict, load_prompt_file
 
@@ -15,7 +16,7 @@ def generate_parquet(in_folder: str, out_file: str):
             fp = os.path.join(in_folder, subfolder, filename)
             if os.path.isfile(fp) and (fp.endswith(".txt") or fp.endswith(".json")):
                 input_filepaths.append(fp)
-    input_filepaths = sorted(input_filepaths)
+    random.shuffle(input_filepaths)
 
     data_list = []
     for subpath in tqdm.tqdm(input_filepaths):
