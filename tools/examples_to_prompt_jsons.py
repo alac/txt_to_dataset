@@ -14,11 +14,14 @@ def convert_examples(in_folder: str, out_folder: str):
         raw_text, _ = load_prompt_file(os.path.join(in_folder, subpath))
         prompt_dict = {}
 
-        assert "\n\n\n\n\n" in raw_text, f"splitter not found in {subpath}"
+        assert "\n\n---\n\n" in raw_text, f"splitter not found in {subpath}"
 
-        input, response = raw_text.split("\n\n\n\n\n", maxsplit=1)
-        prompt_dict["prompt"] = input.strip()
-        prompt_dict["story"] = response.strip()
+        parts = raw_text.split("\n\n---\n\n", maxsplit=3)
+
+        if len(parts) == 3:
+            prompt_dict["context"], prompt_dict["prompt"], prompt_dict["story"] = parts
+        elif len(parts) == 2:
+            prompt_dict["prompt"], prompt_dict["story"] = parts
 
         directory, filename = os.path.split(subpath)
         result = json.dumps(sort_keys(prompt_dict), indent=4)
@@ -32,7 +35,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         usage="""Batch processing for prompts, applying the chosen process to each file in each subfolder of the input folder.
 Takes an input text file and turns it into a prompt json file.
-Assumes only two fields 'prompt' and 'story' (e.g. USER and ASSISTANT) split by five consecutive newlines.
+Assumes only two fields 'prompt' and 'story' (e.g. USER and ASSISTANT) split by "---" surrounded by two blank lines.
 
 python -m tools.examples_to_prompt_jsons --input_folder in --output_folder out""")
     parser.add_argument('--input_folder', type=str, required=True,
