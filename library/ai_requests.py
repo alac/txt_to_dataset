@@ -13,7 +13,8 @@ class EmptyResponseException(ValueError):
 
 
 def run_ai_request(prompt: str, custom_stopping_strings: Optional[list[str]] = None, temperature: float = .1,
-                   clean_blank_lines: bool = True, max_response: int = 1536, ban_eos_token: bool = True):
+                   clean_blank_lines: bool = True, max_response: int = 1536, ban_eos_token: bool = True,
+                   print_prompt=True):
     request_url = settings.get_setting('oobabooga_api.request_url')
     max_context = settings.get_setting('oobabooga_api.context_length')
     if not custom_stopping_strings:
@@ -74,7 +75,8 @@ def run_ai_request(prompt: str, custom_stopping_strings: Optional[list[str]] = N
     client = sseclient.SSEClient(stream_response)
 
     result = ""
-    print(data['prompt'], end='')
+    if print_prompt:
+        print(data['prompt'], end='')
     with open(os.path.join(ROOT_FOLDER, "response.txt"), "w", encoding='utf-8') as f:
         for event in client.events():
             payload = json.loads(event.data)
