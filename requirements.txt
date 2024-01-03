@@ -27,3 +27,4 @@ websocket-client==1.6.3
 wheel==0.38.4
 zope.event==5.0
 zope.interface==6.0
+google-generativeai
