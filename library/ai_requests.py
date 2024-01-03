@@ -3,6 +3,7 @@ import json
 import os
 from typing import Optional
 import sseclient
+import google.generativeai as google_gen_ai
 
 from library.settings_manager import settings, ROOT_FOLDER
 from library.token_count import get_token_count
@@ -15,6 +16,20 @@ class EmptyResponseException(ValueError):
 def run_ai_request(prompt: str, custom_stopping_strings: Optional[list[str]] = None, temperature: float = .1,
                    clean_blank_lines: bool = True, max_response: int = 1536, ban_eos_token: bool = True,
                    print_prompt=True):
+    api_choice = settings.get_setting('ai_settings.api')
+    match api_choice:
+        case "oobabooga_api":
+            return run_ai_request_ooba(prompt, custom_stopping_strings, temperature, clean_blank_lines, max_response,
+                                       ban_eos_token, print_prompt)
+        case "gemini_pro":
+            return run_ai_request_gemini_pro(prompt, custom_stopping_strings, temperature, max_response)
+        case _:
+            raise ValueError(f"{api_choice} is unsupported for the setting ai_settings.api")
+
+
+def run_ai_request_ooba(prompt: str, custom_stopping_strings: Optional[list[str]] = None, temperature: float = .1,
+                        clean_blank_lines: bool = True, max_response: int = 1536, ban_eos_token: bool = True,
+                        print_prompt=True):
     request_url = settings.get_setting('oobabooga_api.request_url')
     max_context = settings.get_setting('oobabooga_api.context_length')
     if not custom_stopping_strings:
@@ -93,3 +108,23 @@ def run_ai_request(prompt: str, custom_stopping_strings: Optional[list[str]] = N
         result = result[:-len("</s>")]
 
     return result
+
+
+def run_ai_request_gemini_pro(prompt: str, custom_stopping_strings: Optional[list[str]] = None, temperature: float = .1,
+                              max_response: int = 1536):
+    google_gen_ai.configure(api_key=settings.get_setting('gemini_pro_api.api_key'))
+    model = google_gen_ai.GenerativeModel('gemini-pro')
+    generation_config = google_gen_ai.types.GenerationConfig()
+    generation_config.stop_sequences = custom_stopping_strings
+    generation_config.max_output_tokens = max_response
+    generation_config.temperature = temperature
+    safety_options = {
+        google_gen_ai.types.HarmCategory.HARM_CATEGORY_HARASSMENT: google_gen_ai.types.HarmBlockThreshold.BLOCK_NONE,
+        google_gen_ai.types.HarmCategory.HARM_CATEGORY_HATE_SPEECH: google_gen_ai.types.HarmBlockThreshold.BLOCK_NONE,
+        google_gen_ai.types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT:
+            google_gen_ai.types.HarmBlockThreshold.BLOCK_NONE,
+        google_gen_ai.types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT:
+            google_gen_ai.types.HarmBlockThreshold.BLOCK_NONE,
+    }
+    response = model.generate_content(prompt, generation_config=generation_config, safety_settings=safety_options)
+    return response.text

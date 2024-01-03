@@ -1,8 +1,15 @@
+[ai_settings]
+# oobabooga_api or gemini_pro
+api = "oobabooga_api"
+
 [oobabooga_api]
 request_url = 'http://127.0.0.1:5000/v1/completions'
 context_length = 8192
 # preset_name should be a oobabooga preset; 'none' will use the defaults hardcoded into library/ai_requests.py
 preset_name = 'none'
+
+[gemini_pro_api]
+api_key = "Better to put this in user.toml since that won't be visible to git."
 
 [prompt_gen]
 # A few shot template for generating a prompt.
