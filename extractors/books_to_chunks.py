@@ -10,7 +10,7 @@ LINE_ENDINGS = (".", "?", "'", '"')
 
 def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int, exclude_if_too_long: bool) -> None:
     print("book_to_chunks processing: ", input_file)
-    with open(input_file, 'r', encoding="utf-8", errors='ignore') as file:
+    with open(input_file, 'r', encoding='utf-8', errors='ignore') as file:
         content = file.read()
     # strip BOM since str.strip() won't do it.
     if ord(content[0]) == 65279:
@@ -44,7 +44,7 @@ def break_text_into_chunks(input_file: str, output_folder: str, max_tokens: int,
     os.makedirs(output_folder, exist_ok=True)
     for i, chunk in enumerate(chunks):
         output_file = os.path.join(output_folder, f"chunk_{i + 1}.txt")
-        with open(output_file, 'w') as file:
+        with open(output_file, 'w', encoding='utf-8') as file:
             file.write(chunk)
 
 

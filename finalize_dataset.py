@@ -66,7 +66,7 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
             if prompt_fp in PROMPT_CACHE:
                 new_prompt, tokens_used, prompt_dict, length = PROMPT_CACHE[prompt_fp]
             else:
-                with open(prompt_fp, 'r') as file:
+                with open(prompt_fp, 'r', encoding='utf-8') as file:
                     prompt_json = file.read()
                 prompt_dict = json.loads(prompt_json)
                 prompt_dict = prepare_prompt_dict_for_row(prompt_dict)
@@ -109,11 +109,11 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
             raise e
 
     validation_set, dataset = random_split(all_prompts, settings.get_setting("prompt_format.validation_set_size"))
-    with open(outfile_path, 'w') as outfile:
+    with open(outfile_path, 'w', encoding='utf-8') as outfile:
         for p in dataset:
             outfile.write(json.dumps(p) + "\n")
     if validation_set:
-        with open(validation_path, 'w') as outfile:
+        with open(validation_path, 'w', encoding='utf-8') as outfile:
             for p in validation_set:
                 outfile.write(json.dumps(p) + "\n")
 
@@ -123,7 +123,7 @@ def make_dataset(prompts_folders, outfile_path, validation_path, info_path, max_
         sorted_items = sorted(distribution.items(), key=lambda x: x[1], reverse=True)
         sorted_dict = dict([i for i in sorted_items if i[1] > 10])
         final_metrics_dict[field] = sorted_dict
-    with open(info_path, 'w') as outfile:
+    with open(info_path, 'w', encoding='utf-8') as outfile:
         json.dump(final_metrics_dict, outfile, indent=2)
 
 

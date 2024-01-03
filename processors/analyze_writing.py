@@ -176,7 +176,7 @@ def finalize_count_phrases(count_state, out_folder=r"user\phrase_counts", min_re
             number_of_stories_for_phrase[phrase] = 1 + number_of_stories_for_phrase.get(phrase, 0)
         sorted_items = sorted(d.items(), key=lambda x: x[1], reverse=True)
         sorted_dict = dict(sorted_items)
-        with open(p, 'w') as f:
+        with open(p, 'w', encoding='utf-8') as f:
             json.dump(sorted_dict, f, indent=4)
 
     # filter global counts, so that phrases must belong to 3 or more stories
@@ -186,5 +186,5 @@ def finalize_count_phrases(count_state, out_folder=r"user\phrase_counts", min_re
             global_counts_with_min_stories[phrase] = global_counts[phrase]
     sorted_items = sorted(global_counts_with_min_stories.items(), key=lambda x: x[1], reverse=True)
     sorted_dict = dict(sorted_items)
-    with open(os.path.join(out_folder, "story_phrases.json"), 'w') as f:
+    with open(os.path.join(out_folder, "story_phrases.json"), 'w', encoding='utf-8') as f:
         json.dump(sorted_dict, f, indent=4)
