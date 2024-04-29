@@ -56,7 +56,12 @@ So, the format is:
     for remove_key in remove_keys:
         if remove_key in result_dict:
             del result_dict[remove_key]
-
+    rename_map = settings_json.get("rename_keys", {})
+    for old_key in rename_map:
+        if old_key in result_dict:
+            new_key = rename_map[old_key]
+            result_dict[new_key] = result_dict[old_key]
+            del result_dict[old_key]
     return result_dict
 
 
