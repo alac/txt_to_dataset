@@ -60,7 +60,7 @@ def batch_generate_prompts(in_folder: str, out_folder: str):
         new_values, debug_files = generate_prompts(story, attempts=3, continuation=continuation)
         if new_values is None or len(new_values) == 0:
             print(f"No data from AI request; skipping {os.path.join(in_folder, subpath)}")
-            return
+            continue
         for k, v in new_values.items():
             prompt_dict[k] = v
 
