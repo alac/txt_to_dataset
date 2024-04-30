@@ -17,6 +17,8 @@ def get_subpaths_to_process(in_folder: str, out_folder: str) -> list[str]:
         if not os.path.isdir(os.path.join(in_folder, subfolder)):
             continue
         for filename in os.listdir(os.path.join(in_folder, subfolder)):
+            if os.path.isdir(os.path.join(in_folder, subfolder, filename)):
+                continue
             out_path = os.path.join(out_folder, subfolder, filename.replace(".txt", ".json"))
             if os.path.isfile(out_path):
                 continue
