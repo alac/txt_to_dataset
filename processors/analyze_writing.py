@@ -10,10 +10,11 @@ from library.token_count import get_token_count
 from library.english_constants import indirect_person_words, lazy_contraction_mapping
 
 
-def generate_prompts(story, blacklist=[], continuation=False, attempts=1, context_length=1000,
+def generate_prompts(story, context=None, blacklist=[], continuation=False, attempts=1, context_length=2000,
                      override_prompt_path=None) -> (Union[None, dict], dict):
     """
     :param story: The text to generate a prompt dictionary for.
+    :param context: The text preceding the story, if any.
     :param blacklist: A set of values that are disallowed from _any_ value in the prompt dictionary.
     :param continuation: If true, splits part of the story into a 'context' that won't be used to generate the prompt.
     :param attempts: The number of times to attempt an AI request to generate a prompt.
@@ -26,7 +27,7 @@ def generate_prompts(story, blacklist=[], continuation=False, attempts=1, contex
         The second element is a dict[str, str], intended to be debug outputs (filename -> content)
     """
 
-    if continuation:
+    if continuation and context is None:
         context_lines = []
         generated_lines = []
         all_lines = story.splitlines(keepends=False)
@@ -45,6 +46,9 @@ def generate_prompts(story, blacklist=[], continuation=False, attempts=1, contex
         context = "\n".join(context_lines)
         story = "\n".join(generated_lines)
 
+    if context is None:
+        context = "N/A"
+
     prompt_path = override_prompt_path
     if not prompt_path:
         prompt_path = settings.get_setting('prompt_gen.prompt_file_path')
@@ -54,7 +58,7 @@ def generate_prompts(story, blacklist=[], continuation=False, attempts=1, contex
     for i in range(attempts):
         try:
             response_dict = few_shot_request(prompt_path,
-                                             {"story": story})
+                                             {"story": story, "context": context})
         except EmptyResponseException:
             response_dict = {}
 

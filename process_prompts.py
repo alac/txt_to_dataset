@@ -46,6 +46,7 @@ def batch_generate_prompts(in_folder: str, out_folder: str):
     for subpath in tqdm.tqdm(subpaths):
         script_chunk, prompt_dict = load_prompt_file(os.path.join(in_folder, subpath))
         story = script_chunk
+        context = None
         if prompt_dict:
             story = get_full_text_from_prompt_dict(prompt_dict)
         else:
@@ -56,8 +57,9 @@ def batch_generate_prompts(in_folder: str, out_folder: str):
             # if we're redoing part of a prompt, we want to preserve the existing split between context/story
             continuation = False
             story = prompt_dict["story"]
+            context = prompt_dict.get("context", None)
 
-        new_values, debug_files = generate_prompts(story, attempts=3, continuation=continuation)
+        new_values, debug_files = generate_prompts(story, context=context, attempts=3, continuation=continuation)
         if new_values is None or len(new_values) == 0:
             print(f"No data from AI request; skipping {os.path.join(in_folder, subpath)}")
             continue

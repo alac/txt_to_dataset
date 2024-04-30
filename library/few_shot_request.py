@@ -34,6 +34,9 @@ So, the format is:
     with open(template_settings, 'r', encoding='utf-8') as file:
         settings_json = json.loads(file.read())
 
+    if not settings_json.get("enable_context", False):
+        del replacements["context"]
+
     request = template.format_map(replacements)
     remove_keys = settings_json.get("remove_keys_from_prompt", [])
     if remove_keys:
