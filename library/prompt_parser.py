@@ -47,6 +47,8 @@ def generate_dataset_row_from_prompt_dict(prompt_dict: dict, drop_tags_prob: flo
             prompt_dict[field] = val.replace("\u201d", "\"").replace("\u201c", "\"")
 
     context = prompt_dict.get("context", None)
+    if context is not None and (len(context.strip()) == 0 or context == "N\A"):
+        context = None
     story = prompt_dict.get("story", "")
     prompt = prompt_dict.get("prompt", "")
 
