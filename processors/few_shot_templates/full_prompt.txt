@@ -25,6 +25,8 @@ Harry opened his eyes and took a deep breath. He had escaped, but he knew he was
 >Tone: suspenseful, intense, thrilling
 >Writing style: visceral, action-oriented, cinematic
 >Pacing: Fast
+>Sensory detail: Medium
+>Moment-to-moment detail: Low
 >Point of View: Third person (Harry)
 >Male Characters: Harry
 >Female Characters: N/A
@@ -42,6 +44,8 @@ The woman sighed and turned away from the window. She went back toward the light
 >Tone: atmospheric, uneasy, startled
 >Writing style: descriptive, sensory, inner thoughts
 >Pacing: Slow
+>Sensory detail: High
+>Moment-to-moment detail: medium
 >Point of View: Third person (woman)
 >Male Characters: N/A
 >Female Characters: unnamed woman
@@ -62,6 +66,8 @@ Liz waited, muscles coiled. A long moment passed as the men hesitated, intimidat
 >Tone: tense, ominous, defiant
 >Writing style: descriptive, immersive, emotional perspective
 >Pacing: medium
+>Sensory detail: High
+>Moment-to-moment detail: High
 >Point of View: Third person (Liz)
 >Male Characters: N/A
 >Female Characters: Liz
