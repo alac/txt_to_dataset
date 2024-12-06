@@ -50,6 +50,14 @@ python finalize_dataset.py --input_folder IN_FOLDER1 IN_FOLDER2
 - `python -m tools.prompt_tester` can be used to generate sample outputs. Uses a template + list of values to cycle through.
 - `python -m tools.merge_prompts` can be used to combine prompts from two different folders. This is mostly for doing partial reverts on the prompt json folders.
 
+## Customization
+
+You can customize how prompts are tagged by editing `processors/few_shot_templates/full_prompt.txt` and `settings.toml`.
+
+Add new tags by adding them to the template and each example in `full_prompt.txt`. Make sure that the tags are always in the same order; the AI may start dropping tags otherwise. You can remove a tag the same way.
+
+`json_key_order` and `allowed_fields` in `settings.toml` should be updated correspondingly. Note that tag names are all lowercase here.
+
 ## Credits
 
 This repo contains lists of male and female names sourced from:
