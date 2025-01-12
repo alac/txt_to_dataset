@@ -2,6 +2,7 @@
 *.xml
 /testing/
 /user/
+/user2/
 /venv/
 response.txt
 user.toml
